@@ -1,0 +1,14 @@
+@import 'config.scss';
+
+.perfil-item {
+	width: 300px;
+
+	input {
+		background-color: #202020;
+		border-radius: $borderRadius;
+		color: #ccc;
+	}
+	p {
+		color: white;
+	}
+}
