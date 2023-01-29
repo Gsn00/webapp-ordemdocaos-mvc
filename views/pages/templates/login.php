@@ -1,6 +1,6 @@
 <div class="background-clip"></div>
 
-<link rel="stylesheet" type="text/css" href="css/login.css">
+<link rel="stylesheet" type="text/css" href="assets/css/login.css">
 
 <div class="form-wrapper w50">
 	<form method="post">

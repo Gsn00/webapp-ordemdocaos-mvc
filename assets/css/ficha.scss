@@ -79,6 +79,7 @@
 	.ficha-info-right {
 		display: flex;
 		align-items: flex-end;
+		justify-content: space-between;
 		flex-direction: column;
 		gap: 25px;
 
@@ -98,23 +99,33 @@
 			width: 100%;
 			align-items: flex-end;
 			flex-direction: column;
-			gap: 15px;
+			gap: 5px;
 
 			.bar-single-container {
-				display: inline-block;
 				width: 100%;
-				max-width: 300px;
-				height: 25px;
-				background-color: #3c3c3c;
-				border-radius: $borderRadius;
-				position: relative;
 
+				.bar-info {
+					display: flex;
+					justify-content: space-between;
+
+					p {
+						font-size: 14px;
+						color: #ccc;
+					}
+					.bar-arrows {
+						display: flex;
+						align-items: center;
+
+						span {
+							color: #ccc;
+						}	
+					}
+				}
 				.arrow-button {
-					position: absolute;
-					z-index: 2;
-					top: 50%;
-					transform: translateY(-50%);
 					cursor: pointer;
+					display: inline-block;
+					vertical-align: top;
+					font-size: 18px;
 
 					&:nth-of-type(1) {
 						left: -20px;
@@ -123,23 +134,31 @@
 						right: -20px;
 					}
 				}
-				.bar-single {
-					@extend .bar-single-container;
-					position: absolute;
-					top: 0;
-					left: 0;
-					width: 75%;
-					background-color: red;
-				}
-				span {
-					color: white;
-					position: absolute;
-					z-index: 2;
-					font-size: 18px;
-					top: 50%;
-					left: 50%;
-					transform: translate(-50%, -50%);
-					font-family: 'Hebrew' !important;
+				.bar-single-wrapper {
+					display: inline-block;
+					width: 100%;
+					height: 25px;
+					background-color: #3c3c3c;
+					border-radius: $borderRadius;
+					position: relative;
+					text-align: center;
+
+					.bar-single {
+						@extend .bar-single-wrapper;
+						position: absolute;
+						top: 0;
+						left: 0;
+						width: 25%;
+						background-color: red;
+					}
+					span {
+						position: absolute;
+						z-index: 2;
+						top: 50%;
+						transform: translate(-50%, -50%);
+						color: white;
+						font-size: 16px;
+					}
 				}
 			}
 		}
@@ -342,7 +361,7 @@
 	flex-direction: column;
 	gap: 15px;
 	align-items: center;
-	padding: 25px;
+	padding: 25px 10%;
 	background-color: #202020;
 	border-radius: $borderRadius;
 
@@ -351,13 +370,19 @@
 	}
 	.inventory {
 		width: 100%;
-		max-width: 800px;
 		border-collapse: collapse;
 		border: 1px solid rgba(90, 90, 90, 0.3);;
 
 		thead th {
 			color: white;
 			border-bottom: 1px solid rgba(90, 90, 90, 0.3);;
+		}
+		tr {
+			transition: 0.2s;
+
+			&:hover {
+				background-color: #535353;
+			}
 		}
 		th,
 		td {
@@ -373,5 +398,45 @@
 				cursor: pointer;
 			}
 		}
+	}
+}
+
+@media screen and(max-width: 1120px) {
+	.ficha-wrapper-1 {
+		flex-direction: column !important;
+		margin-bottom: 50px;
+
+		.ficha-info-right {
+			align-items: center;
+			order: 1;
+			padding: 25px 5%;
+
+			.ficha-bars {
+				padding: 0;
+			}
+		}
+		.ficha-info-left {
+			justify-content: center;
+			order: 2;
+			padding: 25px 5%;
+		}
+	}
+
+	.ficha-wrapper-2 {
+		flex-direction: column;
+		align-items: center;
+		margin-bottom: 50px;
+
+		.attributes-wrapper {
+			padding: 25px 5%;
+		}
+		.skills-wrapper {
+			padding: 25px 5%;
+		}
+	}
+
+	.inventory-container,
+	.powers-wrapper {
+		padding: 25px 5%;
 	}
 }

@@ -1,4 +1,4 @@
-<link rel="stylesheet" type="text/css" href="css/perfil.css">
+<link rel="stylesheet" type="text/css" href="assets/css/perfil.css">
 
 <div class="content-box">
 	<div class="perfil-item">

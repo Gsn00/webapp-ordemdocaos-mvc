@@ -1,4 +1,4 @@
-<link rel="stylesheet" href="<?= PATH ?>css/index.css">
+<link rel="stylesheet" href="assets/css/index.css">
 
 <aside class="sidebar">
 	<h3 class="title">oHypeer</h3>
@@ -56,6 +56,6 @@
 	if (empty($GLOBALS['CURRENT_PAGE'])) {
 		$GLOBALS['CURRENT_PAGE'] = 'home';
 	}
-	include('pages/'.$GLOBALS['CURRENT_PAGE'].'.php');
+	include('views/pages/'.$GLOBALS['CURRENT_PAGE'].'.php');
 	?>
 </div><!-- content -->

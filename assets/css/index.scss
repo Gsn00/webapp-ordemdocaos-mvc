@@ -3,7 +3,9 @@
 header {
 	border-bottom: 1px solid rgba(255, 0, 0, 0.6);
 	background-color: #333333;
-	padding: 20px;
+	height: 65px;
+	display: flex;
+	align-items: center;
 
 	.container {
 		display: flex;
@@ -30,7 +32,7 @@ header {
 
 	.sidebar {
 		width: 250px;
-		height: 100%;
+		height: calc(100vh - 65px);
 		background-color: #333333;
 
 		.title {
@@ -104,6 +106,22 @@ header {
 			color: white;
 			background-color: #282828;
 			border-radius: $borderRadius;
+		}
+	}
+}
+
+@media screen and(max-width: 1280px) {
+	.main {
+		.sidebar {
+			transition: 0.5s;
+			display: inline-block;
+			overflow-x: hidden;
+			left: -250px;
+			position: absolute;
+			z-index: 10;
+		}
+		.content {
+			width: 100%;
 		}
 	}
 }

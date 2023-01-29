@@ -10,3 +10,15 @@ $('body').on('click', '.sidebar-menu-btn', (event)=>{
 	}
 	el.find('.sidebar-submenu').slideToggle();
 });
+
+$('body').on('click', '.mobile-menu-btn, .overlay-full', ()=>{
+	let sidebar = $('.sidebar');
+	let overlay = $('.overlay-full');
+	if (sidebar.css('left') == '-250px') {
+		overlay.css('display', 'block');
+		sidebar.css('left', '0px');
+	} else {
+		overlay.css('display', 'none');
+		sidebar.css('left', '-250px');
+	}
+});

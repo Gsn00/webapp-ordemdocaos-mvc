@@ -1,4 +1,4 @@
-<link rel="stylesheet" type="text/css" href="css/home.css">
+<link rel="stylesheet" type="text/css" href="assets/css/home.css">
 
 <div class="content-box">
 	<h2>Bem-vindo(a), oHypeer!</h2>

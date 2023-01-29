@@ -2,16 +2,16 @@
 
 include('config.php');
 
-include('pages/templates/header.php');
+include('views/pages/templates/header.php');
 
 $app = new Application();
 $app->execute();
 
 if (isset($_SESSION['login']) && $_SESSION['login'] == true) {
-	include('pages/templates/main.php');
+	include('views/pages/templates/main.php');
 } else {
-	include('pages/templates/login.php');
+	include('views/pages/templates/login.php');
 }
-include('pages/templates/footer.php');
+include('views/pages/templates/footer.php');
 
 ?>

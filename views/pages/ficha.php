@@ -1,4 +1,4 @@
-<link rel="stylesheet" type="text/css" href="css/ficha.css">
+<link rel="stylesheet" type="text/css" href="assets/css/ficha.css">
 
 <div class="content-box">
 	<div class="ficha-wrapper-1 inlineFlex spaceFlex">
@@ -54,22 +54,73 @@
 			<div class="ficha-info-image"></div>
 			<div class="ficha-bars">
 				<div class="bar-single-container">
-					<ion-icon class="arrow-button" name="chevron-back-outline"></ion-icon>
-					<div class="bar-single"></div>
-					<span>75 / 100</span>
-					<ion-icon class="arrow-button" name="chevron-forward-outline"></ion-icon>
+					<div class="bar-info">
+						<div class="bar-arrows">
+							<ion-icon class="arrow-button" name="chevron-back-outline"></ion-icon>
+							<div>
+								<ion-icon class="arrow-button" name="caret-back-outline"></ion-icon>
+								<span>-5</span>
+							</div>
+						</div>
+						<p>VIDA</p>
+						<div class="bar-arrows">
+							<div>
+								<span>+5</span>
+								<ion-icon class="arrow-button" name="caret-forward-outline"></ion-icon>
+							</div>
+							<ion-icon class="arrow-button" name="chevron-forward-outline"></ion-icon>
+						</div>
+					</div>
+					<div class="bar-single-wrapper">
+						<div class="bar-single"></div>
+						<span>25 / 100</span>
+					</div>
 				</div><!-- bar-single-container -->
 				<div class="bar-single-container">
-					<ion-icon class="arrow-button" name="chevron-back-outline"></ion-icon>
-					<div class="bar-single"></div>
-					<span>75 / 100</span>
-					<ion-icon class="arrow-button" name="chevron-forward-outline"></ion-icon>
+					<div class="bar-info">
+						<div class="bar-arrows">
+							<ion-icon class="arrow-button" name="chevron-back-outline"></ion-icon>
+							<div>
+								<ion-icon class="arrow-button" name="caret-back-outline"></ion-icon>
+								<span>-5</span>
+							</div>
+						</div>
+						<p>ENERGIA</p>
+						<div class="bar-arrows">
+							<div>
+								<span>+5</span>
+								<ion-icon class="arrow-button" name="caret-forward-outline"></ion-icon>
+							</div>
+							<ion-icon class="arrow-button" name="chevron-forward-outline"></ion-icon>
+						</div>
+					</div>
+					<div class="bar-single-wrapper">
+						<div class="bar-single"></div>
+						<span>25 / 100</span>
+					</div>
 				</div><!-- bar-single-container -->
 				<div class="bar-single-container">
-					<ion-icon class="arrow-button" name="chevron-back-outline"></ion-icon>
-					<div class="bar-single"></div>
-					<span>75 / 100</span>
-					<ion-icon class="arrow-button" name="chevron-forward-outline"></ion-icon>
+					<div class="bar-info">
+						<div class="bar-arrows">
+							<ion-icon class="arrow-button" name="chevron-back-outline"></ion-icon>
+							<div>
+								<ion-icon class="arrow-button" name="caret-back-outline"></ion-icon>
+								<span>-5</span>
+							</div>
+						</div>
+						<p>STAMINA</p>
+						<div class="bar-arrows">
+							<div>
+								<span>+5</span>
+								<ion-icon class="arrow-button" name="caret-forward-outline"></ion-icon>
+							</div>
+							<ion-icon class="arrow-button" name="chevron-forward-outline"></ion-icon>
+						</div>
+					</div>
+					<div class="bar-single-wrapper">
+						<div class="bar-single"></div>
+						<span>25 / 100</span>
+					</div>
 				</div><!-- bar-single-container -->
 			</div><!-- ficha-bars -->
 		</div><!-- ficha-info-right -->
@@ -83,7 +134,7 @@
 			</h2>
 
 			<div class="ficha-attributes">
-				<img src="images/Atributos.png" draggable="false" alt="">
+				<img src="assets/images/Atributos.png" draggable="false" alt="">
 				<span class="ficha-attributes-single" id="agi">2</span>
 				<span class="ficha-attributes-single" id="int">3</span>
 				<span class="ficha-attributes-single" id="vig">4</span>
@@ -175,6 +226,68 @@
 	</div><!-- ficha-wrapper-3 -->
 
 	<div class="ficha-wrapper-4">
+	<div class="inventory-container">
+			<h2 class="mini-title">Ataques</h2>
+			<table class="inventory">
+				<thead>
+					<th>Arma</th>
+					<th>Tipo</th>
+					<th>Ataque</th>
+					<th>Alcance</th>
+					<th>Dano</th>
+					<th>Crítico</th>
+					<th>Recarga</th>
+					<th>Especial</th>
+					<th></th>
+				</thead>
+				<tr>
+					<td>Soco</td>
+					<td>Punho</td>
+					<td>For + Luta</td>
+					<td>Curto</td>
+					<td>1D20</td>
+					<td>19</td>
+					<td>1</td>
+					<td>Não</td>
+					<td class="inventory-edit">
+						<ion-icon name="create-outline"></ion-icon>
+					</td>
+				</tr>
+				<tr>
+					<td>Soco</td>
+					<td>Punho</td>
+					<td>For + Luta</td>
+					<td>Curto</td>
+					<td>1D20</td>
+					<td>19</td>
+					<td>1</td>
+					<td>Não</td>
+					<td class="inventory-edit">
+						<ion-icon name="create-outline"></ion-icon>
+					</td>
+				</tr>
+				<tr>
+					<td>Soco</td>
+					<td>Punho</td>
+					<td>For + Luta</td>
+					<td>Curto</td>
+					<td>1D20</td>
+					<td>19</td>
+					<td>1</td>
+					<td>Não</td>
+					<td class="inventory-edit">
+						<ion-icon name="create-outline"></ion-icon>
+					</td>
+				</tr>
+			</table><!-- inventory -->
+			<div class="page-arrows">
+				<ion-icon class="arrow-left" name="chevron-back-outline"></ion-icon>
+				<ion-icon class="arrow-right" name="chevron-forward-outline"></ion-icon>
+			</div><!-- page-arrows -->
+		</div><!-- inventory-container -->
+	</div><!-- ficha-wrapper-4 -->
+
+	<div class="ficha-wrapper-5">
 		<div class="inventory-container">
 			<h2 class="mini-title">Inventário</h2>
 			<table class="inventory">
@@ -236,5 +349,5 @@
 				<ion-icon class="arrow-right" name="chevron-forward-outline"></ion-icon>
 			</div><!-- page-arrows -->
 		</div><!-- inventory-container -->
-	</div><!-- ficha-wrapper-4 -->
+	</div><!-- ficha-wrapper-5 -->
 </div><!-- content-box -->
