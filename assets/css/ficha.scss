@@ -148,7 +148,7 @@
 						position: absolute;
 						top: 0;
 						left: 0;
-						width: 25%;
+						width: 100%;
 						background-color: red;
 					}
 					span {
@@ -438,5 +438,31 @@
 	.inventory-container,
 	.powers-wrapper {
 		padding: 25px 5%;
+	}
+}
+
+.ficha-create {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
+	gap: 15px;
+	padding-top: 25px;
+
+	button {
+		align-self: flex-start;
+		margin: 25px auto;
+		background-color: #f83c3c;
+		box-shadow: 0px 0px 3px #f83c3c;
+		width: 200px;
+		height: 50px;
+		font-size: 20px;
+		text-transform: uppercase;
+
+		&:hover {
+			color: white;
+			background-color: #ff0000;
+			box-shadow: 0px 0px 3px #ff0000;
+		}
 	}
 }

@@ -1,4 +1,7 @@
+<script src="assets/js/ficha.js"></script>
 <link rel="stylesheet" type="text/css" href="assets/css/ficha.css">
+
+<?php if ($playerExists) { ?>
 
 <div class="content-box">
 	<div class="ficha-wrapper-1 inlineFlex spaceFlex">
@@ -6,46 +9,46 @@
 			<div class="ficha-about">
 				<div class="ficha-item">
 					<p>Nome</p>
-					<input type="text" name="" value="Nome..." disabled>
+					<input type="text" name="" value="<?= $nome ?>" disabled>
 				</div><!-- perfil-item -->
 				<div class="ficha-item">
 					<p>Classe</p>
-					<input type="text" name="" value="Classe..." disabled>
+					<input type="text" name="" value="<?= $classe ?>" disabled>
 				</div><!-- perfil-item -->
 				<div class="ficha-item">
 					<p>Idade</p>
-					<input type="text" name="" value="Idade..." disabled>
+					<input type="text" name="" value="<?= $idade ?>" disabled>
 				</div><!-- perfil-item -->
 				<div class="ficha-item">
 					<p>Nacionalidade</p>
-					<input type="text" name="" value="Nacionalidade..." disabled>
+					<input type="text" name="" value="<?= $nacionalidade ?>" disabled>
 				</div><!-- perfil-item -->
 				<div class="ficha-item">
 					<p>Deslocamento</p>
-					<input type="text" name="" value="Deslocamento..." disabled>
+					<input type="text" name="" value="<?= $deslocamento ?>" disabled>
 				</div><!-- perfil-item -->
 			</div><!-- ficha-about -->
 
 			<div class="ficha-about">
 				<div class="ficha-item">
 					<p>Jogador</p>
-					<input type="text" name="" value="Jogador..." disabled>
+					<input type="text" name="" value="<?= $jogador ?>" disabled>
 				</div><!-- perfil-item -->
 				<div class="ficha-item">
 					<p>Exposição</p>
-					<input type="text" name="" value="Exposição..." disabled>
+					<input type="text" name="" value="<?= $exposicao ?>" disabled>
 				</div><!-- perfil-item -->
 				<div class="ficha-item">
 					<p>Origem</p>
-					<input type="text" name="" value="Origem..." disabled>
+					<input type="text" name="" value="<?= $origem ?>" disabled>
 				</div><!-- perfil-item -->
 				<div class="ficha-item">
 					<p>Trilha</p>
-					<input type="text" name="" value="Trilha..." disabled>
+					<input type="text" name="" value="<?= $trilha ?>" disabled>
 				</div><!-- perfil-item -->
 				<div class="ficha-item">
 					<p>PE/Rodada</p>
-					<input type="text" name="" value="PE/Rodada..." disabled>
+					<input type="text" name="" value="<?= $pe ?>" disabled>
 				</div><!-- perfil-item -->
 			</div><!-- ficha-about -->
 		</div><!-- ficha-info-left -->
@@ -73,7 +76,7 @@
 					</div>
 					<div class="bar-single-wrapper">
 						<div class="bar-single"></div>
-						<span>25 / 100</span>
+						<span><?= $vida ?> / <?= $max_vida ?></span>
 					</div>
 				</div><!-- bar-single-container -->
 				<div class="bar-single-container">
@@ -96,7 +99,7 @@
 					</div>
 					<div class="bar-single-wrapper">
 						<div class="bar-single"></div>
-						<span>25 / 100</span>
+						<span><?= $energia ?> / <?= $max_energia ?></span>
 					</div>
 				</div><!-- bar-single-container -->
 				<div class="bar-single-container">
@@ -119,7 +122,7 @@
 					</div>
 					<div class="bar-single-wrapper">
 						<div class="bar-single"></div>
-						<span>25 / 100</span>
+						<span><?= $stamina ?> / <?= $max_stamina ?></span>
 					</div>
 				</div><!-- bar-single-container -->
 			</div><!-- ficha-bars -->
@@ -135,11 +138,11 @@
 
 			<div class="ficha-attributes">
 				<img src="assets/images/Atributos.png" draggable="false" alt="">
-				<span class="ficha-attributes-single" id="agi">2</span>
-				<span class="ficha-attributes-single" id="int">3</span>
-				<span class="ficha-attributes-single" id="vig">4</span>
-				<span class="ficha-attributes-single" id="pre">5</span>
-				<span class="ficha-attributes-single" id="for">3</span>
+				<span class="ficha-attributes-single" id="agi">0</span>
+				<span class="ficha-attributes-single" id="int">0</span>
+				<span class="ficha-attributes-single" id="vig">0</span>
+				<span class="ficha-attributes-single" id="pre">0</span>
+				<span class="ficha-attributes-single" id="for">0</span>
 			</div><!-- ficha-info-middle -->
 		</div><!-- attributes-wrapper -->
 
@@ -351,3 +354,61 @@
 		</div><!-- inventory-container -->
 	</div><!-- ficha-wrapper-5 -->
 </div><!-- content-box -->
+
+<?php } else { ?>
+
+<div class="content-box">
+	<div class="ficha-create">
+		<h2>OPS! Você ainda não participa dessa mesa.</h2>
+		<h3>Crie uma ficha para entrar!</h3>
+		<button id="btn-ficha-form">CRIAR FICHA</button>
+	</div><!-- ficha-create -->
+</div><!-- content-box -->
+
+<div class="window-container" id="window-ficha-create">
+	<div class="btn-close">
+			<ion-icon name="close-outline"></ion-icon>
+		</div><!-- btn-close -->
+	<div class="window">
+		<div class="split">
+			<div>
+				<p>Nome</p>
+				<input type="text" id="ficha-form-nome">
+				<p>Classe</p>
+				<input type="text" id="ficha-form-classe">
+				<p>Idade</p>
+				<input type="text" id="ficha-form-idade">
+				<p>Nacionalidade</p>
+				<input type="text" id="ficha-form-nacionalidade">
+				<p>Deslocamento</p>
+				<input type="text" id="ficha-form-deslocamento">
+			</div>
+			<div>
+				<p>Exposição</p>
+				<input type="text" id="ficha-form-exposicao">
+				<p>Origem</p>
+				<input type="text" id="ficha-form-origem">
+				<p>Trilha</p>
+				<input type="text" id="ficha-form-trilha">
+				<p>PE/Rodada</p>
+				<input type="text" id="ficha-form-pe">
+			</div>
+		</div><!-- split -->
+		<div>
+			<p>Imagem</p>
+			<input type="file" id="file" accept="image/png, image/jpeg"  id="ficha-form-imagem">
+			<label for="file">
+				<ion-icon name="folder-open"></ion-icon>Escolha uma imagem...
+			</label>
+			<p>Vida máxima</p>
+			<input type="text" id="ficha-form-vida">
+			<p>Energia máxima</p>
+			<input type="text" id="ficha-form-energia">
+			<p>Stamina máxima</p>
+			<input type="text" id="ficha-form-stamina">
+			<button class="btn-create" id="btn-ficha-create">CRIAR</button>
+		</div>
+	</div><!-- window -->
+</div><!-- window-container -->
+
+<?php } ?>

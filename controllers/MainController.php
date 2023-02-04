@@ -1,9 +1,9 @@
 <?php
 namespace Controllers;
-class FichaController extends Controller {
+class MainController extends Controller {
     function __construct() {
-        $this->view = new \Views\View('ficha');
-        $this->model = new \Models\FichaModel();
+        $this->view = new \Views\View('templates/main');
+        $this->model = new \Models\MainModel();
     }
 
     function execute() {

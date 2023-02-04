@@ -102,4 +102,17 @@
             </div><!-- player-turn-single -->
         </div><!-- player-turn -->
     </div><!-- player-turn-container -->
+
+    <div class="console-container">
+        <div class="console-log-container">
+            <div class="console-log">
+                <p>1D20+3 = 21</p>
+                <p>1D20+3 = 21</p>
+                <p>1D20+3 = 21</p>
+                <p>1D20+3 = 21</p>
+                <p>1D20+3 = 3</p>
+            </div><!-- console-log -->
+        </div><!-- console-log-container -->
+        <input type="text" class="console-input" placeholder="Digite aqui">
+    </div><!-- console-container -->
 </div><!-- content-box -->

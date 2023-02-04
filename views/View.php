@@ -7,8 +7,13 @@ class View {
         $this->fileName = $fileName;
     }
 
-    function render() {
-        $GLOBALS['CURRENT_PAGE'] = $this->fileName;    
+    function render($vars = []) {
+        ob_start();
+        extract($vars);
+        include('pages/'.$this->fileName.'.php');
+        $content = ob_get_contents();
+        ob_end_clean();
+        echo $content;
     }
 }
 ?>

@@ -46,6 +46,10 @@ form {
 	align-items: center;
 	justify-content: center;
 	height: 100%;
+
+	#register-form {
+		display: none;
+	}
 }
 .about-rpg {
 	flex-direction: column;
