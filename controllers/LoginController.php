@@ -8,7 +8,6 @@ class LoginController extends Controller {
 
     function execute() {
         $this->view->render();
-        $this->model->load();
     }
 }
 ?>

@@ -1,6 +1,6 @@
 <?php
 namespace Models;
-class MainModel {
+class MainModel extends Model {
     function load() {
         
     }

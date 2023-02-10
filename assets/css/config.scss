@@ -97,6 +97,7 @@ body {
 }
 
 .inlineFlex {
+	display: flex;
 	flex-direction: row !important;
 }
 
@@ -148,7 +149,7 @@ p {
 	text-shadow: $textShadow;
 }
 
-input {
+input, textarea {
 	border-bottom: 1px solid white;
 	width: 100%;
 	height: 35px;
@@ -165,13 +166,27 @@ input {
 	}
 }
 
+textarea {
+	height: 300px;
+	border: 1px solid white;
+	border-radius: $borderRadius;
+	resize: none;
+}
+
 input[type=file] {
 	border: 0;
 	cursor: pointer;
 	display: none;
 }
 
-label[for=file] {
+//Remove arrows from input type=number
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+	-webkit-appearance: none;
+	margin: 0;
+}
+
+label[for=ficha-form-imagem] {
 	background-color: red;
 	padding: 10px;
 	display: inline-block;
@@ -186,6 +201,15 @@ label[for=file] {
 	}
 }
 
+.window-overlay {
+	display: none;
+	width: 100%;
+	height: 100vh;
+	background-color: rgba(0,0,0,0.8);
+	position: absolute;
+	z-index: 3;
+}
+
 .overlay-full {
 	display: none;
 	width: 100%;
@@ -198,7 +222,6 @@ label[for=file] {
 .window-container {
 	background-color: #222222;
 	border-radius: $borderRadius;
-	border: 1px solid #ccc;
 	padding: 25px 12px;
 	padding-top: 60px;
 	position: absolute;
@@ -208,7 +231,6 @@ label[for=file] {
 	transform: translate(-50%, -50%);
 	width: 90%;
 	max-width: 632px;
-	height: 100vh;
 	max-height: 530px;
 	display: none;
 
@@ -221,6 +243,61 @@ label[for=file] {
 		width: 100%;
 		padding: 0px 60px;
 
+		.window-compact {
+			display: flex;
+			flex-wrap: wrap;
+			align-items: flex-start;
+			justify-content: center;
+			gap: 15px;
+
+			.window-compact-box {
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				gap: 5px;
+				text-align: center;
+				width: 45%;
+				border-radius: $borderRadius;
+				background-color: #181818;
+				padding: 10px;
+
+				.window-compact-bonus {
+					display: flex;
+					align-items: center;
+					justify-content: center;
+					gap: 10px;
+				}
+				input {
+					text-align: center;
+					border: none;
+					background-color: #ccc;
+					border-radius: $borderRadius;
+					color: black;
+					width: 30px;
+					height: 30px;
+					padding: 0px;
+					margin: 0;
+				}
+				.buttons {
+					display: flex !important;
+					justify-content: center;
+					gap: 20px;
+
+					button {
+						width: 30px !important;
+						margin: 0;
+						padding: 10px 5px;
+						background-color: #363636;
+						box-shadow: none;
+						border: none;
+
+						&.selected {
+							background-color: black;
+						}
+					}
+				}
+			}
+		}
 		.split {
 			display: flex;
 			gap: 60px;
@@ -228,7 +305,7 @@ label[for=file] {
 		input {
 			margin-bottom: 15px;
 		}
-		.btn-create {
+		button {
 			align-self: flex-start;
 			margin: 25px auto;
 			background-color: #f83c3c;
@@ -259,6 +336,33 @@ label[for=file] {
 		cursor: pointer;
 		font-size: 22px;
 		color: #ccc;
+	}
+}
+
+#window-dice {
+	padding: 30px;
+	max-width: 400px;
+	height: 200px;
+
+	.window {
+		gap: 10px;
+		text-align: center;
+
+		.dice-values {
+			width: 220px;
+			height: 15px;
+			display: flex;
+			justify-content: center;
+			gap: 10px;
+
+			span {
+				font-size: 12px;
+				display: none;
+			}
+		}
+		#dice-value {
+			display: none;
+		}
 	}
 }
 

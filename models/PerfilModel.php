@@ -1,8 +1,8 @@
 <?php
 namespace Models;
-class PerfilModel {
+class PerfilModel extends Model {
     function load() {
-        
+        //
     }
 
     function getVars() {

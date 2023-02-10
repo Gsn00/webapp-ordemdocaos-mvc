@@ -4,6 +4,10 @@
 <?php if ($playerExists) { ?>
 
 <div class="content-box">
+	<h2 class="mini-title">
+		Geral
+		<ion-icon name="create-outline"></ion-icon>
+	</h2>
 	<div class="ficha-wrapper-1 inlineFlex spaceFlex">
 		<div class="ficha-info-left">
 			<div class="ficha-about">
@@ -54,7 +58,9 @@
 		</div><!-- ficha-info-left -->
 
 		<div class="ficha-info-right">
-			<div class="ficha-info-image"></div>
+			<div class="ficha-info-image" style="">
+				<img src="assets/uploads/<?= $imagem ?>">
+			</div>
 			<div class="ficha-bars">
 				<div class="bar-single-container">
 					<div class="bar-info">
@@ -133,93 +139,120 @@
 		<div class="attributes-wrapper">
 			<h2 class="mini-title">
 				Atributos
-				<ion-icon name="create-outline"></ion-icon>
+				<ion-icon id="btn-attributes-edit" name="create-outline"></ion-icon>
 			</h2>
 
 			<div class="ficha-attributes">
 				<img src="assets/images/Atributos.png" draggable="false" alt="">
-				<span class="ficha-attributes-single" id="agi">0</span>
-				<span class="ficha-attributes-single" id="int">0</span>
-				<span class="ficha-attributes-single" id="vig">0</span>
-				<span class="ficha-attributes-single" id="pre">0</span>
-				<span class="ficha-attributes-single" id="for">0</span>
+				<div class="ficha-attributes-single" id="agi" 
+					name="agilidade" value="<?= $atributos['agilidade'] ?>">
+					<text><?= $atributos['agilidade'] ?></text>
+				</div>
+				<div class="ficha-attributes-single" id="int"
+					name="inteligencia" value="<?= $atributos['inteligencia'] ?>">
+					<text><?= $atributos['inteligencia'] ?></text>
+				</div>
+				<div class="ficha-attributes-single" id="vig"
+					name="vigor" value="<?= $atributos['vigor'] ?>">
+					<text><?= $atributos['vigor'] ?></text>
+				</div>
+				<div class="ficha-attributes-single" id="pre"
+					name="presenca" value="<?= $atributos['presenca'] ?>">
+					<text><?= $atributos['presenca'] ?></text>
+				</div>
+				<div class="ficha-attributes-single" id="for" 
+					name="forca" value="<?= $atributos['forca'] ?>">
+					<text><?= $atributos['forca'] ?></text>
+				</div>
 			</div><!-- ficha-info-middle -->
+
+			<div class="window-container" id="attributes-edit-window">
+				<div class="btn-close">
+					<ion-icon name="close-outline"></ion-icon>
+				</div><!-- btn-close -->
+				<div class="window">
+					<div class="window-compact">
+						<?php foreach ($atributos as $key => $value) { ?>
+						<div class="window-compact-box">
+							<p><?= ucfirst($key) ?></p>
+							<input class="attributes-input" name="<?= $key ?>" value="<?= $value ?>" type="number" id="">
+						</div>
+						<?php } ?>
+					</div>
+					<button id="btn-attributes-update">Salvar</button>
+				</div><!-- window -->
+			</div><!-- window-container -->
+
 		</div><!-- attributes-wrapper -->
 
 		<div class="skills-wrapper">
 			<h2 class="mini-title">
 				Perícias
-				<ion-icon name="create-outline"></ion-icon>
+				<ion-icon id="btn-skills-edit" name="create-outline"></ion-icon>
 			</h2>
 
 			<div class="skills-container">
-				<div class="skill-single">
-					<p>Acrobacia</p>
-					<input type="text" name="" value="0">
+				<?php foreach ($pericias as $key => $value) { if ($value != 0) { ?>
+				<div class="skill-single" name="<?= $key ?>" 
+					attribute="<?= $getAttrFromSkill[$key] ?>" value="<?= $value ?>" 
+					bonus="<?= $pericias_bonus[$key] ?>">
+					<p><?= ucfirst($key) ?></p>
+					<span><?= $value ?></span>
 				</div><!-- skill-single -->
-				<div class="skill-single">
-					<p>Adestramento</p>
-					<input type="text" name="" value="0">
-				</div><!-- skill-single -->
-				<div class="skill-single">
-					<p>Artes</p>
-					<input type="text" name="" value="0">
-				</div><!-- skill-single -->
-				<div class="skill-single">
-					<p>Atletismo</p>
-					<input type="text" name="" value="0">
-				</div><!-- skill-single -->
-				<div class="skill-single">
-					<p>Atualidades</p>
-					<input type="text" name="" value="0">
-				</div><!-- skill-single -->
-				<div class="skill-single">
-					<p>Ciência</p>
-					<input type="text" name="" value="0">
-				</div><!-- skill-single -->
-				<div class="skill-single">
-					<p>Acrobacia</p>
-					<input type="text" name="" value="0">
-				</div><!-- skill-single -->
-				<div class="skill-single">
-					<p>Acrobacia</p>
-					<input type="text" name="" value="0">
-				</div><!-- skill-single -->
+				<?php } } ?>
 			</div><!-- skills-container -->
 		</div><!-- skills-wrapper -->
+
+		<div class="window-container" id="skills-edit-window">
+				<div class="btn-close">
+					<ion-icon name="close-outline"></ion-icon>
+				</div><!-- btn-close -->
+				<div class="window">
+					<div class="window-compact">
+						<?php foreach ($pericias as $key => $value) { ?>
+						<div class="window-compact-box window-skill-box" 
+							name="<?= $key ?>" value="<?= $value ?>" 
+							bonus="<?= $pericias_bonus[$key] ?>">
+							<p><?= ucfirst($key) ?></p>
+							<div class="buttons">
+								<button class="skill-select-button <?=($value == 0) ? 'selected' : '' ?>" value="0">0</button>
+								<button class="skill-select-button <?=($value == 5) ? 'selected' : '' ?>" value="5">5</button>
+								<button class="skill-select-button <?=($value == 10) ? 'selected' : '' ?>" value="10">10</button>
+								<button class="skill-select-button <?=($value == 15) ? 'selected' : '' ?>" value="15">15</button>
+							</div>
+							<div class="window-compact-bonus">
+								<p>Bônus</p>
+								<input class="bonus-input" value="<?= $pericias_bonus[$key] ?>" type="number" id="">
+							</div>
+						</div>
+						<?php } ?>
+					</div><!-- window-compact -->
+					<button id="btn-skills-update">Salvar</button>
+				</div><!-- window -->
+			</div><!-- window-container -->
 	</div><!-- ficha-wrapper-2 -->
 
 	<div class="ficha-wrapper-3">
 		<div class="powers-wrapper">
-			<h2 class="mini-title">Poderes</h2>
+			<h2 class="mini-title">
+				Poderes
+				<ion-icon id="power-add" name="add-outline"></ion-icon>
+			</h2>
 			<table class="powers-table">
-				<tr>
+				<?php if (isset($poderes)) { foreach($poderes as $key => $value) { ?>
+				<tr class="power-single" name="<?= ucfirst($value['nome']) ?>"
+					description="<?= ucfirst($value['descricao']) ?>">
 					<td>
-						<h3>Soltar fogo pelas orelhas</h3>
-						<p>Com esse poder vc fica girando e queima os inimigo</p>
+						<h3 class="power-single-name"><?= ucfirst($value['nome']) ?></h3>
+						<div>
+							<p class="power-single-description"><?= ucfirst($value['descricao']) ?></p>
+						</div>
 					</td>
 					<td class="power-edit">
-						<ion-icon name="create-outline"></ion-icon>
+						<ion-icon class="btn-power-edit" name="create-outline"></ion-icon>
 					</td>
 				</tr>
-				<tr>
-					<td>
-						<h3>Super leitura</h3>
-						<p>Voce consegue ler 5 livros em um minuto</p>
-					</td>
-					<td class="power-edit">
-						<ion-icon name="create-outline"></ion-icon>
-					</td>
-				</tr>
-				<tr>
-					<td>
-						<h3>Olhar da desgraça</h3>
-						<p>Voce consegue olhar para a face do rage sem vomitar</p>
-					</td>
-					<td class="power-edit">
-						<ion-icon name="create-outline"></ion-icon>
-					</td>
-				</tr>
+				<?php } } ?>
 			</table><!-- powers-table -->
 			<div class="page-arrows">
 				<ion-icon class="arrow-left" name="chevron-back-outline"></ion-icon>
@@ -230,7 +263,10 @@
 
 	<div class="ficha-wrapper-4">
 	<div class="inventory-container">
-			<h2 class="mini-title">Ataques</h2>
+			<h2 class="mini-title">
+				Ataques
+				<ion-icon name="add-outline"></ion-icon>
+			</h2>
 			<table class="inventory">
 				<thead>
 					<th>Arma</th>
@@ -292,7 +328,10 @@
 
 	<div class="ficha-wrapper-5">
 		<div class="inventory-container">
-			<h2 class="mini-title">Inventário</h2>
+			<h2 class="mini-title">
+				Inventário
+				<ion-icon name="add-outline"></ion-icon>
+			</h2>
 			<table class="inventory">
 				<thead>
 					<th>Nome</th>
@@ -377,7 +416,7 @@
 				<p>Classe</p>
 				<input type="text" id="ficha-form-classe">
 				<p>Idade</p>
-				<input type="text" id="ficha-form-idade">
+				<input type="number" id="ficha-form-idade">
 				<p>Nacionalidade</p>
 				<input type="text" id="ficha-form-nacionalidade">
 				<p>Deslocamento</p>
@@ -391,21 +430,22 @@
 				<p>Trilha</p>
 				<input type="text" id="ficha-form-trilha">
 				<p>PE/Rodada</p>
-				<input type="text" id="ficha-form-pe">
+				<input type="number" id="ficha-form-pe">
 			</div>
 		</div><!-- split -->
 		<div>
 			<p>Imagem</p>
-			<input type="file" id="file" accept="image/png, image/jpeg"  id="ficha-form-imagem">
-			<label for="file">
+			<input type="file" accept="image/png, image/jpeg, image/gif" id="ficha-form-imagem">
+			<label for="ficha-form-imagem">
 				<ion-icon name="folder-open"></ion-icon>Escolha uma imagem...
 			</label>
+
 			<p>Vida máxima</p>
-			<input type="text" id="ficha-form-vida">
+			<input type="number" id="ficha-form-vida">
 			<p>Energia máxima</p>
-			<input type="text" id="ficha-form-energia">
+			<input type="number" id="ficha-form-energia">
 			<p>Stamina máxima</p>
-			<input type="text" id="ficha-form-stamina">
+			<input type="number" id="ficha-form-stamina">
 			<button class="btn-create" id="btn-ficha-create">CRIAR</button>
 		</div>
 	</div><!-- window -->

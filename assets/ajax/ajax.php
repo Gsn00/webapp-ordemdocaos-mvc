@@ -32,14 +32,55 @@ if ($_POST['action'] == 'ficha-create') {
     $origem = $_POST['origem'];
     $trilha = $_POST['trilha'];
     $pe = $_POST['pe'];
-    //Salvar apenas o diretorio no banco de dados e fazer upload da imagem no server
-    $imagem = $_POST['imagem'];
+    $imagem = @$_FILES['imagem'];
     $vida = $_POST['vida'];
     $energia = $_POST['energia'];
     $stamina = $_POST['stamina'];
 
     $status = $model->createFicha($userId, $nome, $classe, $idade, $nacionalidade, $deslocamento,
         $jogador, $exposicao, $origem, $trilha, $pe, $imagem, $vida, $energia, $stamina);
+    die(json_encode($status));
+}
+
+if ($_POST['action'] == 'attributes-update') {
+    $model = new \Models\FichaModel();
+
+    $attributes = json_decode($_POST['attributes'], true);
+    $array = [];
+
+    foreach($attributes as $key => $val) {
+        foreach($attributes[$key] as $key2 => $value2) {
+            $array[$key2] = $value2;
+        }
+    }
+    
+    $status = $model->updateAttributes($array);
+    die(json_encode($status));
+}
+
+if ($_POST['action'] == 'skills-update') {
+    $model = new \Models\FichaModel();
+
+    $skills = json_decode($_POST['skills'], true);
+    $array = [];
+
+    foreach($skills as $key => $val) {
+        foreach($skills[$key] as $key2 => $value2) {
+            $array[$key2] = $value2;
+        }
+    }
+    
+    $status = $model->updateSkills($array);
+    die(json_encode($status));
+}
+
+if ($_POST['action'] == 'power-add') {
+    $model = new \Models\FichaModel();
+
+    $name = $_POST['name'];
+    $description = $_POST['description'];
+    
+    $status = $model->addPower($name, $description);
     die(json_encode($status));
 }
 ?>

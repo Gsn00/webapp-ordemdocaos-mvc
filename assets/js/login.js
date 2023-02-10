@@ -24,7 +24,7 @@ $('body').on('click', '#register-action', (event)=>{
         }
 	}).done((data)=>{
 		if (data == 'Sucesso') {
-            window.location.href = '';
+            location.reload();
             return;
         }
         alert(data);
@@ -47,7 +47,7 @@ $('body').on('click', '#login-action', (event)=>{
         }
 	}).done((data)=>{
 		if (data == 'Sucesso') {
-            window.location.href = '';
+            location.reload();
             return;
         }
         alert(data);

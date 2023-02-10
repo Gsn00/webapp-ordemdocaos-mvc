@@ -8,7 +8,6 @@ class FichaController extends Controller {
 
     function execute() {
         $this->view->render($this->model->getVars());
-        $this->model->load();
     }
 }
 ?>

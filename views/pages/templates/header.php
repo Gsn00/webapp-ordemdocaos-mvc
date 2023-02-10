@@ -10,6 +10,8 @@
 
 	<script src="assets/js/jquery.js"></script>
 
+	<script src="assets/js/functions.js"></script>
+
 	<link rel="stylesheet" type="text/css" href="assets/css/index.css">
 </head>
 <body>
@@ -26,5 +28,6 @@
 	</header>
 
 	<div class="overlay-full"></div>
+	<div class="window-overlay"></div>
 
 	<div class="main">
