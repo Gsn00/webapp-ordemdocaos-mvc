@@ -1,3 +1,6 @@
+limitCharacters('.bonus-input', 2);
+limitCharacters('.attributes-input', 2);
+
 $('body').on('click', '.window-container .btn-close', (event)=>{
     let window = $(event.target).closest('.window-container');
     $('.window-overlay').css('display', 'none');
@@ -49,7 +52,7 @@ $('body').on('click', '#btn-ficha-create', ()=>{
     formdata.append('stamina', stamina);
 
     $.ajax({
-		url: 'http://localhost/Projetos%20Pessoais/OrdemDoCaos%20-%20MVC/assets/ajax/ajax.php',
+		url: AJAXURL,
 		method: 'post',
         contentType: false,
         processData: false,
@@ -221,7 +224,7 @@ $('body').on('click', '#btn-attributes-update', ()=>{
     console.log(changedAttributes)
 
     $.ajax({
-		url: 'http://localhost/Projetos%20Pessoais/OrdemDoCaos%20-%20MVC/assets/ajax/ajax.php',
+		url: AJAXURL,
 		method: 'post',
         contentType: false,
         processData: false,
@@ -246,7 +249,7 @@ $('body').on('click', '#btn-skills-update', () => {
     formdata.append('skills', JSON.stringify(changedSkills));
 
     $.ajax({
-		url: 'http://localhost/Projetos%20Pessoais/OrdemDoCaos%20-%20MVC/assets/ajax/ajax.php',
+		url: AJAXURL,
 		method: 'post',
         contentType: false,
         processData: false,
@@ -264,9 +267,6 @@ $('body').on('click', '#btn-skills-update', () => {
         $('#btn-skill-update').css('display', 'flex');
 	});
 });
-
-limitCharacters('.bonus-input', 2);
-limitCharacters('.attributes-input', 2);
 
 $('body').on('input', '.bonus-input', (event)=>{
     let el = $(event.target);
@@ -300,17 +300,17 @@ $('body').on('click', '#power-add', () => {
 })
 
 $('body').on('click', '#btn-power-add-save', () => {
-    let name = $('#power-add-name').val();
-    let description = $('#power-add-description').val();
+    let elName = $('#power-add-name').val();
+    let elDescription = $('#power-add-description').val();
     
     $.ajax({
-		url: 'http://localhost/Projetos%20Pessoais/OrdemDoCaos%20-%20MVC/assets/ajax/ajax.php',
+		url: AJAXURL,
 		method: 'post',
 		dataType: 'json',
         data: { 
             'action': 'power-add',
-            'name': name,
-            'description': description
+            'name': elName,
+            'description': elDescription
         },
         beforeSend: ()=>{
             $('#btn-power-add-save').css('display', 'none');
@@ -325,21 +325,479 @@ $('body').on('click', '#btn-power-add-save', () => {
 	});
 })
 
+$('body').on('click', '#btn-power-edit-delete', () => {
+    let el = $('#powers-edit-window');
+    let elPowerId = el.attr('powerid');
+
+    $.ajax({
+		url: AJAXURL,
+		method: 'post',
+		dataType: 'json',
+        data: { 
+            'action': 'power-delete',
+            'powerid': elPowerId
+        },
+        beforeSend: ()=>{
+            $('#btn-power-edit-delete').parent().css('display', 'none');
+        }
+	}).done((data)=>{
+		if (data == 'Sucesso') {
+            location.reload();
+            return;
+        }
+        alert(data);
+        $('#btn-power-edit-delete').parent().css('display', 'flex');
+	});
+})
+
+$('body').on('click', '#btn-power-edit-update', () => {
+    let el = $('#powers-edit-window');
+    let elName = el.find('input').val();
+    let elDescription = el.find('textarea').val();
+    let elPowerId = el.attr('powerid');
+
+    $.ajax({
+		url: AJAXURL,
+		method: 'post',
+		dataType: 'json',
+        data: { 
+            'action': 'power-update',
+            'powerid': elPowerId,
+            'name': elName,
+            'description': elDescription
+        },
+        beforeSend: ()=>{
+            $('#btn-power-edit-update').parent().css('display', 'none');
+        }
+	}).done((data)=>{
+		if (data == 'Sucesso') {
+            location.reload();
+            return;
+        }
+        alert(data);
+        $('#btn-power-edit-update').parent().css('display', 'flex');
+	});
+})
+
 $('body').on('click', '.btn-power-edit', (event) => {
     let el = $(event.target).closest('.power-single');
     let elName = el.attr('name');
     let elDescription = el.attr('description');
+    let elPowerId = el.attr('powerid');
     let window = $(`
-    <div class="window-container" id="powers-edit-window" tempWindow=true">
+    <div class="window-container" id="powers-edit-window" powerid="`+elPowerId+`" tempWindow=true">
         <div class="btn-close">
             <ion-icon name="close-outline"></ion-icon>
         </div><!-- btn-close -->
         <div class="window">
             <input type="text" value="`+elName+`" placeholder="Nome">
             <textarea placeholder="Descrição">`+elDescription+`</textarea>
-            <div class="inlineFlex"><button>Excluir</button><button>Salvar</button></div>
+            <div class="inlineFlex">
+                <button id="btn-power-edit-delete">Excluir</button>
+                <button id="btn-power-edit-update">Salvar</button>
+            </div>
         </div>
     </div>
     `);
     openWindow(window);
+})
+
+$('body').on('click', '#btn-attack-add', () => {
+    let window = $(`
+    <div class="window-container" id="attack-add-window" tempWindow=true">
+        <div class="btn-close">
+            <ion-icon name="close-outline"></ion-icon>
+        </div><!-- btn-close -->
+        <div class="window">
+            <div>
+                <p>Arma</p>
+                <input id="attack-add-arma" type="text" value="">
+            </div>
+            <div>
+                <p>Tipo</p>
+                <input id="attack-add-tipo" type="text" value="">
+            </div>
+            <div>
+                <p>Ataque</p>
+                <input id="attack-add-ataque" type="text" value="">
+            </div>
+            <div>
+                <p>Alcance</p>
+                <input id="attack-add-alcance" type="text" value="">
+            </div>
+            <div>
+                <p>Dano</p>
+                <input id="attack-add-dano" type="text" value="">
+            </div>
+            <div>
+                <p>Crítico</p>
+                <input id="attack-add-critico" type="text" value="">
+            </div>
+            <div>
+                <p>Recarga</p>
+                <input id="attack-add-recarga" type="text" value="">
+            </div>
+            <div>
+                <p>Especial</p>
+                <select id="attack-add-especial">
+                    <option value="não">Não</option>
+                    <option value="sim">Sim</option>
+                </select>
+            </div>
+            
+            <button id="btn-attack-add-save">Salvar</button>
+        </div>
+    </div>
+    `);
+    openWindow(window);
+})
+
+$('body').on('click', '#btn-attack-add-save', () => {
+    let elArma = $('#attack-add-arma').val();
+    let elTipo = $('#attack-add-tipo').val();
+    let elAtaque = $('#attack-add-ataque').val();
+    let elAlcance = $('#attack-add-alcance').val();
+    let elDano = $('#attack-add-dano').val();
+    let elCritico = $('#attack-add-critico').val();
+    let elRecarga = $('#attack-add-recarga').val();
+    let elEspecial = $('#attack-add-especial').val();
+
+    $.ajax({
+		url: AJAXURL,
+		method: 'post',
+		dataType: 'json',
+        data: { 
+            'action': 'attack-add',
+            'arma': elArma,
+            'tipo': elTipo,
+            'ataque': elAtaque,
+            'alcance': elAlcance,
+            'dano': elDano,
+            'critico': elCritico,
+            'recarga': elRecarga,
+            'especial': elEspecial
+        },
+        beforeSend: ()=>{
+            $('#btn-attack-add-save').css('display', 'none');
+        }
+	}).done((data)=>{
+		if (data == 'Sucesso') {
+            location.reload();
+            return;
+        }
+        alert(data);
+        $('#btn-attack-add-save').css('display', 'flex');
+	});
+})
+
+$('body').on('click', '.btn-attack-edit', (event) => {
+    let el = $(event.target).closest('.attack-single');
+    let elArma = el.attr('arma');
+    let elTipo = el.attr('tipo');
+    let elAtaque = el.attr('ataque');
+    let elAlcance = el.attr('alcance');
+    let elDano = el.attr('dano');
+    let elCritico = el.attr('critico');
+    let elRecarga = el.attr('recarga');
+    let elEspecial = el.attr('especial');
+    let elAtaqueId = el.attr('ataqueid');
+
+    let window = $(`
+    <div class="window-container" id="attack-edit-window" ataqueid="`+elAtaqueId+`" tempWindow=true">
+        <div class="btn-close">
+            <ion-icon name="close-outline"></ion-icon>
+        </div><!-- btn-close -->
+        <div class="window">
+        <div>
+            <p>Arma</p>
+                <input id="attack-edit-arma" type="text" value="`+elArma+`">
+            </div>
+            <div>
+                <p>Tipo</p>
+                <input id="attack-edit-tipo" type="text" value="`+elTipo+`">
+            </div>
+            <div>
+                <p>Ataque</p>
+                <input id="attack-edit-ataque" type="text" value="`+elAtaque+`">
+            </div>
+            <div>
+                <p>Alcance</p>
+                <input id="attack-edit-alcance" type="text" value="`+elAlcance+`">
+            </div>
+            <div>
+                <p>Dano</p>
+                <input id="attack-edit-dano" type="text" value="`+elDano+`">
+            </div>
+            <div>
+                <p>Crítico</p>
+                <input id="attack-edit-critico" type="number" value="`+elCritico+`">
+            </div>
+            <div>
+                <p>Recarga</p>
+                <input id="attack-edit-recarga" type="number" value="`+elRecarga+`">
+            </div>
+            <div>
+                <p>Especial</p>
+                <select id="attack-edit-especial">
+                    <option `+(('não' == elEspecial) ? 'selected' : '')+` value="não">Não</option>
+                    <option `+(('sim' == elEspecial) ? 'selected' : '')+` value="sim">Sim</option>
+                </select>
+            </div>
+            <div class="inlineFlex">
+                <button id="btn-attack-edit-delete">Excluir</button>
+                <button id="btn-attack-edit-update">Salvar</button>
+            </div>
+        </div>
+    </div>
+    `);
+    openWindow(window);
+})
+
+$('body').on('click', '#btn-attack-edit-delete', () => {
+    let el = $('#attack-edit-window');
+    let elAtaqueId = el.attr('ataqueid');
+
+    $.ajax({
+		url: AJAXURL,
+		method: 'post',
+		dataType: 'json',
+        data: { 
+            'action': 'attack-delete',
+            'ataqueid': elAtaqueId
+        },
+        beforeSend: ()=>{
+            $('#btn-attack-edit-delete').parent().css('display', 'none');
+        }
+	}).done((data)=>{
+		if (data == 'Sucesso') {
+            location.reload();
+            return;
+        }
+        alert(data);
+        $('#btn-attack-edit-delete').parent().css('display', 'flex');
+	});
+})
+
+$('body').on('click', '#btn-attack-edit-update', () => {
+    let el = $('#attack-edit-window');
+    let elArma = el.find('#attack-edit-arma').val();
+    let elTipo = el.find('#attack-edit-tipo').val();
+    let elAtaque = el.find('#attack-edit-ataque').val();
+    let elAlcance = el.find('#attack-edit-alcance').val();
+    let elDano = el.find('#attack-edit-dano').val();
+    let elCritico = el.find('#attack-edit-critico').val();
+    let elRecarga = el.find('#attack-edit-recarga').val();
+    let elEspecial = el.find('#attack-edit-especial').val();
+    let elAtaqueId = el.attr('ataqueid');
+
+    $.ajax({
+		url: AJAXURL,
+		method: 'post',
+		dataType: 'json',
+        data: { 
+            'action': 'attack-update',
+            'ataqueid': elAtaqueId,
+            'arma': elArma,
+            'tipo': elTipo,
+            'ataque': elAtaque,
+            'alcance': elAlcance,
+            'dano': elDano,
+            'critico': elCritico,
+            'recarga': elRecarga,
+            'especial': elEspecial
+        },
+        beforeSend: ()=>{
+            $('#btn-attack-edit-update').parent().css('display', 'none');
+        }
+	}).done((data)=>{
+		if (data == 'Sucesso') {
+            location.reload();
+            return;
+        }
+        alert(data);
+        $('#btn-attack-edit-update').parent().css('display', 'flex');
+	});
+})
+
+$('body').on('click', '#btn-inventory-add', () => {
+    let window = $(`
+    <div class="window-container" id="inventory-add-window" tempWindow=true">
+        <div class="btn-close">
+            <ion-icon name="close-outline"></ion-icon>
+        </div><!-- btn-close -->
+        <div class="window">
+            <div>
+                <p>Nome</p>
+                <input id="inventory-add-nome" type="text" value="">
+            </div>
+            <div>
+                <p>Quantidade</p>
+                <input id="inventory-add-quantidade" type="number" value="">
+            </div>
+            <div>
+                <p>Categoria</p>
+                <select id="inventory-add-categoria">
+                    <option value="0">0</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                </select>
+            </div>
+            <div>
+                <p>Tipo</p>
+                <select id="inventory-add-tipo">
+                    <option value="0">0</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                </select>
+            </div>
+            
+            <button id="btn-inventory-add-save">Salvar</button>
+        </div>
+    </div>
+    `);
+    openWindow(window);
+})
+
+$('body').on('click', '#btn-inventory-add-save', () => {
+    let elNome = $('#inventory-add-nome').val();
+    let elQuantidade = $('#inventory-add-quantidade').val();
+    let elCategoria = $('#inventory-add-categoria').val();
+    let elTipo = $('#inventory-add-tipo').val();
+
+    $.ajax({
+		url: AJAXURL,
+		method: 'post',
+		dataType: 'json',
+        data: { 
+            'action': 'inventory-add',
+            'nome': elNome,
+            'quantidade': elQuantidade,
+            'categoria': elCategoria,
+            'tipo': elTipo
+        },
+        beforeSend: ()=>{
+            $('#btn-inventory-add-save').css('display', 'none');
+        }
+	}).done((data)=>{
+		if (data == 'Sucesso') {
+            location.reload();
+            return;
+        }
+        alert(data);
+        $('#btn-inventory-add-save').css('display', 'flex');
+	});
+})
+
+$('body').on('click', '.btn-inventory-edit', (event) => {
+    let el = $(event.target).closest('.inventory-single');
+    let elNome = el.attr('nome');
+    let elQuantidade = el.attr('quantidade');
+    let elCategoria = el.attr('categoria');
+    let elTipo = el.attr('tipo');
+    let elInventarioId = el.attr('inventarioid');
+
+    let window = $(`
+    <div class="window-container" id="inventory-edit-window" inventarioid="`+elInventarioId+`" tempWindow=true">
+        <div class="btn-close">
+            <ion-icon name="close-outline"></ion-icon>
+        </div><!-- btn-close -->
+        <div class="window">
+            <div>
+                <p>Nome</p>
+                <input id="inventory-edit-nome" type="text" value="`+elNome+`">
+            </div>
+            <div>
+                <p>Quantidade</p>
+                <input id="inventory-edit-quantidade" type="text" value="`+elQuantidade+`">
+            </div>
+            <div>
+                <p>Categoria</p>
+                <select id="inventory-edit-categoria">
+                    <option `+(('0' == elCategoria) ? 'selected' : '')+` value="0">0</option>
+                    <option `+(('1' == elCategoria) ? 'selected' : '')+` value="1">1</option>
+                    <option `+(('2' == elCategoria) ? 'selected' : '')+` value="2">2</option>
+                    <option `+(('3' == elCategoria) ? 'selected' : '')+` value="3">3</option>
+                    <option `+(('4' == elCategoria) ? 'selected' : '')+` value="4">4</option>
+                </select>
+            </div>
+            <div>
+                <p>Tipo</p>
+                <select id="inventory-edit-tipo">
+                    <option `+(('0' == elTipo) ? 'selected' : '')+` value="0">0</option>
+                    <option `+(('1' == elTipo) ? 'selected' : '')+` value="1">1</option>
+                    <option `+(('2' == elTipo) ? 'selected' : '')+` value="2">2</option>
+                    <option `+(('3' == elTipo) ? 'selected' : '')+` value="3">3</option>
+                    <option `+(('4' == elTipo) ? 'selected' : '')+` value="4">4</option>
+                </select>
+            </div>
+            <div class="inlineFlex">
+                <button id="btn-inventory-edit-delete">Excluir</button>
+                <button id="btn-inventory-edit-update">Salvar</button>
+            </div>
+        </div>
+    </div>
+    `);
+    openWindow(window);
+})
+
+$('body').on('click', '#btn-inventory-edit-delete', () => {
+    let el = $('#inventory-edit-window');
+    let elInventarioId = el.attr('inventarioid');
+
+    $.ajax({
+		url: AJAXURL,
+		method: 'post',
+		dataType: 'json',
+        data: { 
+            'action': 'inventory-delete',
+            'inventarioid': elInventarioId
+        },
+        beforeSend: ()=>{
+            $('#btn-inventory-edit-delete').parent().css('display', 'none');
+        }
+	}).done((data)=>{
+		if (data == 'Sucesso') {
+            location.reload();
+            return;
+        }
+        alert(data);
+        $('#btn-inventory-edit-delete').parent().css('display', 'flex');
+	});
+})
+
+$('body').on('click', '#btn-inventory-edit-update', () => {
+    let el = $('#inventory-edit-window');
+    let elNome = el.find('#inventory-edit-nome').val();
+    let elQuantidade = el.find('#inventory-edit-quantidade').val();
+    let elCategoria = el.find('#inventory-edit-categoria').val();
+    let elTipo = el.find('#inventory-edit-tipo').val();
+    let elInventarioId = el.attr('inventarioid');
+
+    $.ajax({
+        url: AJAXURL,
+        method: 'post',
+        dataType: 'json',
+        data: { 
+            'action': 'inventory-update',
+            'inventarioid': elInventarioId,
+            'nome': elNome,
+            'quantidade': elQuantidade,
+            'categoria': elCategoria,
+            'tipo': elTipo
+        },
+        beforeSend: ()=>{
+            $('#btn-inventory-edit-update').parent().css('display', 'none');
+        }
+    }).done((data)=>{
+        if (data == 'Sucesso') {
+            location.reload();
+            return;
+        }
+        alert(data);
+        $('#btn-inventory-edit-update').parent().css('display', 'flex');
+    });
 })

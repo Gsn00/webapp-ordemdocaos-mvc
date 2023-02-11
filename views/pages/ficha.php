@@ -149,19 +149,19 @@
 					<text><?= $atributos['agilidade'] ?></text>
 				</div>
 				<div class="ficha-attributes-single" id="int"
-					name="inteligencia" value="<?= $atributos['inteligencia'] ?>">
+				name="inteligencia" value="<?= $atributos['inteligencia'] ?>">
 					<text><?= $atributos['inteligencia'] ?></text>
 				</div>
 				<div class="ficha-attributes-single" id="vig"
-					name="vigor" value="<?= $atributos['vigor'] ?>">
+				name="vigor" value="<?= $atributos['vigor'] ?>">
 					<text><?= $atributos['vigor'] ?></text>
 				</div>
 				<div class="ficha-attributes-single" id="pre"
-					name="presenca" value="<?= $atributos['presenca'] ?>">
+				name="presenca" value="<?= $atributos['presenca'] ?>">
 					<text><?= $atributos['presenca'] ?></text>
 				</div>
 				<div class="ficha-attributes-single" id="for" 
-					name="forca" value="<?= $atributos['forca'] ?>">
+				name="forca" value="<?= $atributos['forca'] ?>">
 					<text><?= $atributos['forca'] ?></text>
 				</div>
 			</div><!-- ficha-info-middle -->
@@ -194,8 +194,8 @@
 			<div class="skills-container">
 				<?php foreach ($pericias as $key => $value) { if ($value != 0) { ?>
 				<div class="skill-single" name="<?= $key ?>" 
-					attribute="<?= $getAttrFromSkill[$key] ?>" value="<?= $value ?>" 
-					bonus="<?= $pericias_bonus[$key] ?>">
+				attribute="<?= $getAttrFromSkill[$key] ?>" value="<?= $value ?>" 
+				bonus="<?= $pericias_bonus[$key] ?>">
 					<p><?= ucfirst($key) ?></p>
 					<span><?= $value ?></span>
 				</div><!-- skill-single -->
@@ -211,8 +211,8 @@
 					<div class="window-compact">
 						<?php foreach ($pericias as $key => $value) { ?>
 						<div class="window-compact-box window-skill-box" 
-							name="<?= $key ?>" value="<?= $value ?>" 
-							bonus="<?= $pericias_bonus[$key] ?>">
+						name="<?= $key ?>" value="<?= $value ?>" 
+						bonus="<?= $pericias_bonus[$key] ?>">
 							<p><?= ucfirst($key) ?></p>
 							<div class="buttons">
 								<button class="skill-select-button <?=($value == 0) ? 'selected' : '' ?>" value="0">0</button>
@@ -240,8 +240,8 @@
 			</h2>
 			<table class="powers-table">
 				<?php if (isset($poderes)) { foreach($poderes as $key => $value) { ?>
-				<tr class="power-single" name="<?= ucfirst($value['nome']) ?>"
-					description="<?= ucfirst($value['descricao']) ?>">
+				<tr class="power-single" powerid="<?= $key ?>" name="<?= ucfirst($value['nome']) ?>"
+				description="<?= ucfirst($value['descricao']) ?>">
 					<td>
 						<h3 class="power-single-name"><?= ucfirst($value['nome']) ?></h3>
 						<div>
@@ -265,7 +265,7 @@
 	<div class="inventory-container">
 			<h2 class="mini-title">
 				Ataques
-				<ion-icon name="add-outline"></ion-icon>
+				<ion-icon id="btn-attack-add" name="add-outline"></ion-icon>
 			</h2>
 			<table class="inventory">
 				<thead>
@@ -279,45 +279,25 @@
 					<th>Especial</th>
 					<th></th>
 				</thead>
-				<tr>
-					<td>Soco</td>
-					<td>Punho</td>
-					<td>For + Luta</td>
-					<td>Curto</td>
-					<td>1D20</td>
-					<td>19</td>
-					<td>1</td>
-					<td>Não</td>
+				<?php if (isset($ataques)) { foreach ($ataques as $key => $value) { ?>
+				<tr class="attack-single" ataqueid="<?= $key ?>" arma="<?= $value['arma'] ?>" 
+				tipo="<?= $value['tipo'] ?>" ataque="<?= $value['ataque'] ?>" 
+				alcance="<?= $value['alcance'] ?>" dano="<?= $value['dano'] ?>" 
+				critico="<?= $value['critico'] ?>" recarga="<?= $value['recarga'] ?>"
+				especial="<?= $value['especial'] ?>">
+					<td><?= ucfirst($value['arma']) ?></td>
+					<td><?= ucfirst($value['tipo']) ?></td>
+					<td><?= ucfirst($value['ataque']) ?></td>
+					<td><?= ucfirst($value['alcance']) ?></td>
+					<td><?= strtoupper($value['dano']) ?></td>
+					<td><?= $value['critico'] ?></td>
+					<td><?= $value['recarga'] ?></td>
+					<td><?= ucfirst($value['especial']) ?></td>
 					<td class="inventory-edit">
-						<ion-icon name="create-outline"></ion-icon>
+						<ion-icon class="btn-attack-edit" name="create-outline"></ion-icon>
 					</td>
 				</tr>
-				<tr>
-					<td>Soco</td>
-					<td>Punho</td>
-					<td>For + Luta</td>
-					<td>Curto</td>
-					<td>1D20</td>
-					<td>19</td>
-					<td>1</td>
-					<td>Não</td>
-					<td class="inventory-edit">
-						<ion-icon name="create-outline"></ion-icon>
-					</td>
-				</tr>
-				<tr>
-					<td>Soco</td>
-					<td>Punho</td>
-					<td>For + Luta</td>
-					<td>Curto</td>
-					<td>1D20</td>
-					<td>19</td>
-					<td>1</td>
-					<td>Não</td>
-					<td class="inventory-edit">
-						<ion-icon name="create-outline"></ion-icon>
-					</td>
-				</tr>
+				<?php } } ?>
 			</table><!-- inventory -->
 			<div class="page-arrows">
 				<ion-icon class="arrow-left" name="chevron-back-outline"></ion-icon>
@@ -330,7 +310,7 @@
 		<div class="inventory-container">
 			<h2 class="mini-title">
 				Inventário
-				<ion-icon name="add-outline"></ion-icon>
+				<ion-icon id="btn-inventory-add" name="add-outline"></ion-icon>
 			</h2>
 			<table class="inventory">
 				<thead>
@@ -340,51 +320,19 @@
 					<th>Tipo</th>
 					<th></th>
 				</thead>
-				<tr>
-					<td>Pão</td>
-					<td>2</td>
-					<td>0</td>
-					<td>1</td>
+				<?php if (isset($inventario)) { foreach ($inventario as $key => $value) { ?>
+				<tr class="inventory-single" inventarioid="<?= $key ?>" nome="<?= $value['nome'] ?>"
+				quantidade="<?= $value['quantidade'] ?>" categoria="<?= $value['categoria'] ?>" 
+				tipo="<?= $value['tipo'] ?>">
+					<td><?= ucfirst($value['nome']) ?></td>
+					<td><?= $value['quantidade'] ?></td>
+					<td><?= $value['categoria'] ?></td>
+					<td><?= $value['tipo'] ?></td>
 					<td class="inventory-edit">
-						<ion-icon name="create-outline"></ion-icon>
+						<ion-icon class="btn-inventory-edit" name="create-outline"></ion-icon>
 					</td>
 				</tr>
-				<tr>
-					<td>Arma pika das galaxia que atira raios</td>
-					<td>1</td>
-					<td>5</td>
-					<td>1</td>
-					<td class="inventory-edit">
-						<ion-icon name="create-outline"></ion-icon>
-					</td>
-				</tr>
-				<tr>
-					<td>Arma pika das galaxia que atira raios</td>
-					<td>1</td>
-					<td>5</td>
-					<td>1</td>
-					<td class="inventory-edit">
-						<ion-icon name="create-outline"></ion-icon>
-					</td>
-				</tr>
-				<tr>
-					<td>Arma pika das galaxia que atira raios</td>
-					<td>1</td>
-					<td>5</td>
-					<td>1</td>
-					<td class="inventory-edit">
-						<ion-icon name="create-outline"></ion-icon>
-					</td>
-				</tr>
-				<tr>
-					<td>Arma pika das galaxia que atira raios</td>
-					<td>1</td>
-					<td>5</td>
-					<td>1</td>
-					<td class="inventory-edit">
-						<ion-icon name="create-outline"></ion-icon>
-					</td>
-				</tr>
+				<?php } } ?>
 			</table><!-- inventory -->
 			<div class="page-arrows">
 				<ion-icon class="arrow-left" name="chevron-back-outline"></ion-icon>

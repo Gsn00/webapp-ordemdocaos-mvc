@@ -5,3 +5,5 @@ var limitCharacters = (input, maxlength) => {
         if (parseFloat(el.val().length) > maxlength) el.val(val);
     });
 }
+
+const AJAXURL = 'http://localhost/Projetos%20Pessoais/OrdemDoCaos%20-%20MVC/assets/ajax/ajax.php';

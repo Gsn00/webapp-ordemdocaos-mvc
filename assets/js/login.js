@@ -12,7 +12,7 @@ $('body').on('click', '#register-action', (event)=>{
     let passwordRepeat = $('#signup-password-repeat').val();
     
     $.ajax({
-		url: 'http://localhost/Projetos%20Pessoais/OrdemDoCaos%20-%20MVC/assets/ajax/ajax.php',
+		url: AJAXURL,
 		method: 'post',
 		dataType: 'json',
         data: { 
@@ -37,7 +37,7 @@ $('body').on('click', '#login-action', (event)=>{
     let password = $('#login-password').val();
     
     $.ajax({
-		url: 'http://localhost/Projetos%20Pessoais/OrdemDoCaos%20-%20MVC/assets/ajax/ajax.php',
+		url: AJAXURL,
 		method: 'post',
 		dataType: 'json',
         data: { 

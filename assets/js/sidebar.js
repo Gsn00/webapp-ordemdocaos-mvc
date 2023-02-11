@@ -26,7 +26,7 @@ $('body').on('click', '.mobile-menu-btn, .overlay-full', ()=>{
 
 $('body').on('click', '.last-item', (event)=>{
 	$.ajax({
-		url: 'http://localhost/Projetos%20Pessoais/OrdemDoCaos%20-%20MVC/assets/ajax/ajax.php',
+		url: AJAXURL,
 		method: 'post',
 		dataType: 'json',
 		error: (xhr, status, error)=>{
@@ -34,7 +34,7 @@ $('body').on('click', '.last-item', (event)=>{
 		},
 		data: { 'action': 'disconnect' }
 	}).done((data)=>{
-		window.location.href = data;
+		location.reload();
 	});
 })
 

@@ -8,7 +8,7 @@ class FichaModel extends Model {
                 $_SESSION['rpg-list'] = array();
 
                 $sql = \MySQL::connect()->prepare
-                    ("SELECT * FROM `tb_rpg.ordemdocaos.players` WHERE user_id=?");
+                ("SELECT * FROM `tb_rpg.ordemdocaos.players` WHERE user_id=?");
                 $sql->execute(array($_SESSION['id']));
                 if ($sql->rowCount() > 0) {
                     array_push($_SESSION['rpg-list'], 'ordemdocaos');
@@ -63,6 +63,38 @@ class FichaModel extends Model {
                             $_SESSION['ordemdocaos']['poderes'][$value['id']]['descricao'] = $value['descricao'];
                         }
                     }
+
+                    $sql = \MySQL::connect()->prepare
+                    ("SELECT * FROM `tb_rpg.ordemdocaos.ataques` WHERE user_id=?");
+                    $sql->execute(array($_SESSION['id']));
+                    if ($sql->rowCount() > 0) {
+                        $info = $sql->fetchAll();
+
+                        foreach ($info as $key => $value) { 
+                            $_SESSION['ordemdocaos']['ataques'][$value['id']]['arma'] = $value['arma'];
+                            $_SESSION['ordemdocaos']['ataques'][$value['id']]['tipo'] = $value['tipo'];
+                            $_SESSION['ordemdocaos']['ataques'][$value['id']]['ataque'] = $value['ataque'];
+                            $_SESSION['ordemdocaos']['ataques'][$value['id']]['alcance'] = $value['alcance'];
+                            $_SESSION['ordemdocaos']['ataques'][$value['id']]['dano'] = $value['dano'];
+                            $_SESSION['ordemdocaos']['ataques'][$value['id']]['critico'] = $value['critico'];
+                            $_SESSION['ordemdocaos']['ataques'][$value['id']]['recarga'] = $value['recarga'];
+                            $_SESSION['ordemdocaos']['ataques'][$value['id']]['especial'] = $value['especial'];
+                        }
+                    }
+
+                    $sql = \MySQL::connect()->prepare
+                    ("SELECT * FROM `tb_rpg.ordemdocaos.inventario` WHERE user_id=?");
+                    $sql->execute(array($_SESSION['id']));
+                    if ($sql->rowCount() > 0) {
+                        $info = $sql->fetchAll();
+
+                        foreach ($info as $key => $value) { 
+                            $_SESSION['ordemdocaos']['inventario'][$value['id']]['nome'] = $value['nome'];
+                            $_SESSION['ordemdocaos']['inventario'][$value['id']]['quantidade'] = $value['quantidade'];
+                            $_SESSION['ordemdocaos']['inventario'][$value['id']]['categoria'] = $value['categoria'];
+                            $_SESSION['ordemdocaos']['inventario'][$value['id']]['tipo'] = $value['tipo'];
+                        }
+                    }
                 }
             }
         } catch (\Throwable $th) {
@@ -91,6 +123,16 @@ class FichaModel extends Model {
             if (isset($_SESSION['ordemdocaos']['poderes'])) {
                 foreach ($_SESSION['ordemdocaos']['poderes'] as $key => $value) {
                     $vars['poderes'][$key] = $value;
+                }
+            }
+            if (isset($_SESSION['ordemdocaos']['ataques'])) {
+                foreach ($_SESSION['ordemdocaos']['ataques'] as $key => $value) {
+                    $vars['ataques'][$key] = $value;
+                }
+            }
+            if (isset($_SESSION['ordemdocaos']['inventario'])) {
+                foreach ($_SESSION['ordemdocaos']['inventario'] as $key => $value) {
+                    $vars['inventario'][$key] = $value;
                 }
             }
             $vars['getAttrFromSkill'] = $this->getAttrFromSkill();
@@ -187,7 +229,9 @@ class FichaModel extends Model {
                 DELETE FROM `tb_rpg.ordemdocaos.players` WHERE user_id=$userId;
                 DELETE FROM `tb_rpg.ordemdocaos.atributos` WHERE user_id=$userId;
                 DELETE FROM `tb_rpg.ordemdocaos.pericias` WHERE user_id=$userId;
-
+                DELETE * FROM `tb_rpg.ordemdocaos.poderes` WHERE user_id=$userId;
+                DELETE * FROM `tb_rpg.ordemdocaos.ataques` WHERE user_id=$userId;
+                DELETE * FROM `tb_rpg.ordemdocaos.inventario` WHERE user_id=$userId;
                 ");
             $sql->execute();
 
@@ -291,15 +335,197 @@ class FichaModel extends Model {
 
     function addPower($name, $description) {
         try {
+            if ($name == '') {
+                return 'O nome não pode ficar vazio.';
+            }
+
             $userId = $_SESSION['id'];
             $sql = \MySQL::connect();
             $query = $sql->prepare("INSERT INTO `tb_rpg.ordemdocaos.poderes` 
-                 VALUES (null,?,?,?)");
+            VALUES (null,?,?,?)");
             $query->execute(array($userId, $name, $description));
             $lastId = $sql->lastInsertId();
 
             $_SESSION['ordemdocaos']['poderes'][$lastId]['nome'] = $name;
             $_SESSION['ordemdocaos']['poderes'][$lastId]['descricao'] = $description;
+
+            return 'Sucesso';
+        } catch (\Throwable $th) {
+            return 'Erro: ' . $th->getMessage();
+        }
+    }
+
+    function deletePower($powerId) {
+        try {
+            $userId = $_SESSION['id'];
+            $sql = \MySQL::connect()->prepare("DELETE FROM `tb_rpg.ordemdocaos.poderes` 
+            WHERE id=? AND user_id=?");
+            $sql->execute(array($powerId, $userId));
+
+            unset($_SESSION['ordemdocaos']['poderes'][$powerId]);
+
+            return 'Sucesso';
+        } catch (\Throwable $th) {
+            return 'Erro: ' . $th->getMessage();
+        }
+    }
+
+    function updatePower($powerId, $name, $description) {
+        try {
+            if ($name == '') {
+                return 'O nome não pode ficar vazio.';
+            }
+
+            $userId = $_SESSION['id'];
+            $sql = \MySQL::connect()->prepare("UPDATE `tb_rpg.ordemdocaos.poderes` 
+            SET nome=?, descricao=? WHERE id=? AND user_id=?");
+            $sql->execute(array($name, $description, $powerId, $userId));
+
+            $_SESSION['ordemdocaos']['poderes'][$powerId]['nome'] = $name;
+            $_SESSION['ordemdocaos']['poderes'][$powerId]['descricao'] = $description;
+
+            return 'Sucesso';
+        } catch (\Throwable $th) {
+            return 'Erro: ' . $th->getMessage();
+        }
+    }
+
+    function addAttack($arr) {
+        try {
+            foreach ($arr as $value) {
+                if ($value == '') {
+                    return 'Nenhum campo pode ficar vazio.';
+                }
+            }
+
+            $userId = $_SESSION['id'];
+            $sql = \MySQL::connect();
+            $query = $sql->prepare("INSERT INTO `tb_rpg.ordemdocaos.ataques` 
+            VALUES (null,?,?,?,?,?,?,?,?,?)");
+            $query->execute($arr);
+            $lastId = $sql->lastInsertId();
+
+            $_SESSION['ordemdocaos']['ataques'][$lastId]['arma'] = $arr[1];
+            $_SESSION['ordemdocaos']['ataques'][$lastId]['tipo'] = $arr[2];
+            $_SESSION['ordemdocaos']['ataques'][$lastId]['ataque'] = $arr[3];
+            $_SESSION['ordemdocaos']['ataques'][$lastId]['alcance'] = $arr[4];
+            $_SESSION['ordemdocaos']['ataques'][$lastId]['dano'] = $arr[5];
+            $_SESSION['ordemdocaos']['ataques'][$lastId]['critico'] = $arr[6];
+            $_SESSION['ordemdocaos']['ataques'][$lastId]['recarga'] = $arr[7];
+            $_SESSION['ordemdocaos']['ataques'][$lastId]['especial'] = $arr[8];
+
+            return 'Sucesso';
+        } catch (\Throwable $th) {
+            return 'Erro: ' . $th->getMessage();
+        }
+    }
+
+    function deleteAttack($ataqueId) {
+        try {
+            $userId = $_SESSION['id'];
+            $sql = \MySQL::connect()->prepare("DELETE FROM `tb_rpg.ordemdocaos.ataques` 
+            WHERE id=? AND user_id=?");
+            $sql->execute(array($ataqueId, $userId));
+
+            unset($_SESSION['ordemdocaos']['ataques'][$ataqueId]);
+
+            return 'Sucesso';
+        } catch (\Throwable $th) {
+            return 'Erro: ' . $th->getMessage();
+        }
+    }
+
+    function updateAttack($arr) {
+        try {
+            foreach ($arr as $value) {
+                if ($value == '') {
+                    return 'Nenhum campo pode ficar vazio';
+                }
+            }
+
+            $userId = $_SESSION['id'];
+            $sql = \MySQL::connect()->prepare("UPDATE `tb_rpg.ordemdocaos.ataques` 
+            SET arma=?, tipo=?, ataque=?, alcance=?, dano=?, critico=?, recarga=?, especial=?
+            WHERE id=? AND user_id=?");
+            $sql->execute($arr);
+
+            $ataqueId = $arr[8];
+
+            $_SESSION['ordemdocaos']['ataques'][$ataqueId]['arma'] = $arr[0];
+            $_SESSION['ordemdocaos']['ataques'][$ataqueId]['tipo'] = $arr[1];
+            $_SESSION['ordemdocaos']['ataques'][$ataqueId]['ataque'] = $arr[2];
+            $_SESSION['ordemdocaos']['ataques'][$ataqueId]['alcance'] = $arr[3];
+            $_SESSION['ordemdocaos']['ataques'][$ataqueId]['dano'] = $arr[4];
+            $_SESSION['ordemdocaos']['ataques'][$ataqueId]['critico'] = $arr[5];
+            $_SESSION['ordemdocaos']['ataques'][$ataqueId]['recarga'] = $arr[6];
+            $_SESSION['ordemdocaos']['ataques'][$ataqueId]['especial'] = $arr[7];
+
+            return 'Sucesso';
+        } catch (\Throwable $th) {
+            return 'Erro: ' . $th->getMessage();
+        }
+    }
+
+    function addInventory($arr) {
+        try {
+            foreach ($arr as $value) {
+                if ($value == '') {
+                    return 'Nenhum campo pode ficar vazio.';
+                }
+            }
+
+            $userId = $_SESSION['id'];
+            $sql = \MySQL::connect();
+            $query = $sql->prepare("INSERT INTO `tb_rpg.ordemdocaos.inventario` 
+            VALUES (null,?,?,?,?,?)");
+            $query->execute($arr);
+            $lastId = $sql->lastInsertId();
+
+            $_SESSION['ordemdocaos']['inventario'][$lastId]['nome'] = $arr[1];
+            $_SESSION['ordemdocaos']['inventario'][$lastId]['quantidade'] = $arr[2];
+            $_SESSION['ordemdocaos']['inventario'][$lastId]['categoria'] = $arr[3];
+            $_SESSION['ordemdocaos']['inventario'][$lastId]['tipo'] = $arr[4];
+
+            return 'Sucesso';
+        } catch (\Throwable $th) {
+            return 'Erro: ' . $th->getMessage();
+        }
+    }
+
+    function deleteInventory($inventarioId) {
+        try {
+            $userId = $_SESSION['id'];
+            $sql = \MySQL::connect()->prepare("DELETE FROM `tb_rpg.ordemdocaos.inventario` 
+            WHERE id=? AND user_id=?");
+            $sql->execute(array($inventarioId, $userId));
+
+            unset($_SESSION['ordemdocaos']['inventario'][$inventarioId]);
+
+            return 'Sucesso';
+        } catch (\Throwable $th) {
+            return 'Erro: ' . $th->getMessage();
+        }
+    }
+
+    function updateInventory($arr) {
+        try {
+            foreach ($arr as $value) {
+                if ($value == '') {
+                    return 'Nenhum campo pode ficar vazio';
+                }
+            }
+
+            $userId = $_SESSION['id'];
+            $sql = \MySQL::connect()->prepare("UPDATE `tb_rpg.ordemdocaos.inventario` 
+            SET nome=?, quantidade=?, categoria=?, tipo=? WHERE id=? AND user_id=?");
+            $sql->execute($arr);
+
+            $inventarioId = $arr[4];
+
+            $_SESSION['ordemdocaos']['inventario'][$inventarioId]['nome'] = $arr[0];
+            $_SESSION['ordemdocaos']['inventario'][$inventarioId]['quantidade'] = $arr[1];
+            $_SESSION['ordemdocaos']['inventario'][$inventarioId]['categoria'] = $arr[2];
+            $_SESSION['ordemdocaos']['inventario'][$inventarioId]['tipo'] = $arr[3];
 
             return 'Sucesso';
         } catch (\Throwable $th) {
