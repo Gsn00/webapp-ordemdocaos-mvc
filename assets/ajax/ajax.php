@@ -31,14 +31,30 @@ if ($_POST['action'] == 'ficha-create') {
     $exposicao = $_POST['exposicao'];
     $origem = $_POST['origem'];
     $trilha = $_POST['trilha'];
-    $pe = $_POST['pe'];
     $imagem = @$_FILES['imagem'];
-    $vida = $_POST['vida'];
-    $energia = $_POST['energia'];
-    $stamina = $_POST['stamina'];
 
     $status = $model->createFicha($userId, $nome, $classe, $idade, $nacionalidade, $deslocamento,
-        $jogador, $exposicao, $origem, $trilha, $pe, $imagem, $vida, $energia, $stamina);
+        $jogador, $exposicao, $origem, $trilha, $imagem);
+    die(json_encode($status));
+}
+
+if ($_POST['action'] == 'ficha-update') {
+    $model = new \Models\FichaModel();
+
+    $userId = $_SESSION['id'];
+    $nome = $_POST['nome'];
+    $classe = $_POST['classe'];
+    $idade = $_POST['idade'];
+    $nacionalidade = $_POST['nacionalidade'];
+    $deslocamento = $_POST['deslocamento'];
+    $jogador = $_SESSION['user'];
+    $exposicao = $_POST['exposicao'];
+    $origem = $_POST['origem'];
+    $trilha = $_POST['trilha'];
+    $imagem = @$_FILES['imagem'];
+
+    $status = $model->updateFicha($userId, $nome, $classe, $idade, 
+        $nacionalidade, $deslocamento, $exposicao, $origem, $trilha, $imagem);
     die(json_encode($status));
 }
 
@@ -192,6 +208,16 @@ if ($_POST['action'] == 'inventory-update') {
     $arr = array($nome, $quantidade, $categoria, $tipo, $inventarioId, $userId);
      
     $status = $model->updateInventory($arr);
+    die(json_encode($status));
+}
+
+if ($_POST['action'] == 'update-bar') {
+    $model = new \Models\FichaModel();
+
+    $bar = $_POST['bar'];
+    $current = $_POST['current'];
+     
+    $status = $model->updateBar($bar, $current);
     die(json_encode($status));
 }
 

@@ -1,3 +1,91 @@
+$(document).ready(() => {
+    let configBars = () => {
+        let fill = $('.bar-single');
+        fill.each(function() {
+            let bar = $(this);
+            let stats = bar.parent().find('.bar-stats');
+            let barname = stats.attr('barname');
+            let current = parseInt(stats.attr('current'));
+            let max = parseInt(stats.attr('max'));
+            let percentage = current * 100 / max;
+            bar.css('width', percentage+'%');
+
+            let btnRem1 = bar.parent().parent().find('.btn-bar-rem-1');
+            btnRem1.on('click', () => {
+                if (current - 1 >= 0) {
+                    current -= 1;
+                } else {
+                    current = 0;
+                }
+                stats.attr('current', current);
+                stats.html(current+' / '+max);
+                let percentage = current * 100 / max;
+                bar.css('width', percentage+'%');
+                updateBar(barname, current);
+            })
+
+            let btnAdd1 = bar.parent().parent().find('.btn-bar-add-1');
+            btnAdd1.on('click', () => {
+                if (current + 1 <= max) {
+                    current += 1;
+                    stats.attr('current', current);
+                    stats.html(current+' / '+max);
+                    let percentage = current * 100 / max;
+                    bar.css('width', percentage+'%');
+                    updateBar(barname, current);
+                }
+            })
+
+            let btnRem5 = bar.parent().parent().find('.btn-bar-rem-5');
+            btnRem5.on('click', () => {
+                if (current - 5 >= 0) {
+                    current -= 5;
+                } else {
+                    current = 0;
+                }
+                stats.attr('current', current);
+                stats.html(current+' / '+max);
+                let percentage = current * 100 / max;
+                bar.css('width', percentage+'%');
+                updateBar(barname, current);
+            })
+
+            let btnAdd5 = bar.parent().parent().find('.btn-bar-add-5');
+            btnAdd5.on('click', () => {
+                if (current + 5 <= max) {
+                    current += 5;
+                } else {
+                    current = max;
+                }
+                stats.attr('current', current);
+                stats.html(current+' / '+max);
+                let percentage = current * 100 / max;
+                bar.css('width', percentage+'%');
+                updateBar(barname, current);
+            })
+        })
+    }
+    configBars();
+})
+
+let updateBar = (bar, current) => { 
+    $.ajax({
+		url: AJAXURL,
+		method: 'post',
+		dataType: 'json',
+        data: { 
+            'action': 'update-bar',
+            'bar': bar,
+            'current': current
+        }
+	}).done((data)=>{
+		if (data == 'Sucesso') {
+            return;
+        }
+        alert(data);
+	});
+}
+
 limitCharacters('.bonus-input', 2);
 limitCharacters('.attributes-input', 2);
 
@@ -28,16 +116,12 @@ $('body').on('click', '#btn-ficha-create', ()=>{
     let exposicao = $('#ficha-form-exposicao').val();
     let origem = $('#ficha-form-origem').val();
     let trilha = $('#ficha-form-trilha').val();
-    let pe = $('#ficha-form-pe').val();
-    let vida = $('#ficha-form-vida').val();
-    let energia = $('#ficha-form-energia').val();
-    let stamina = $('#ficha-form-stamina').val();
     let imagem = $('#ficha-form-imagem').prop('files')[0];
 
     let formdata = new FormData();
 
-    formdata.append('imagem', imagem);
     formdata.append('action', 'ficha-create');
+    formdata.append('imagem', imagem);
     formdata.append('nome', nome);
     formdata.append('classe', classe);
     formdata.append('idade', idade);
@@ -46,10 +130,6 @@ $('body').on('click', '#btn-ficha-create', ()=>{
     formdata.append('exposicao', exposicao);
     formdata.append('origem', origem);
     formdata.append('trilha', trilha);
-    formdata.append('pe', pe);
-    formdata.append('vida', vida);
-    formdata.append('energia', energia);
-    formdata.append('stamina', stamina);
 
     $.ajax({
 		url: AJAXURL,
@@ -68,6 +148,130 @@ $('body').on('click', '#btn-ficha-create', ()=>{
         }
         alert($.parseJSON(data));
         $('#btn-ficha-create').css('display', 'flex');
+	});
+});
+
+$('body').on('click', '#btn-ficha-edit', (event)=>{
+    let el = $(event.target).closest('h2');
+    let nome = el.attr('nome');
+    let classe = el.attr('classe');
+    let idade = el.attr('idade');
+    let nacionalidade = el.attr('nacionalidade');
+    let deslocamento = el.attr('deslocamento');
+    let exposicao = el.attr('exposicao');
+    let origem = el.attr('origem');
+    let trilha = el.attr('trilha');
+
+    let window = $(`
+    <div class="window-container" id="window-ficha-edit" tempWindow=true>
+        <div class="btn-close">
+            <ion-icon name="close-outline"></ion-icon>
+        </div>
+        <div class="window">
+            <div class="split">
+                <div>
+                    <p>Nome</p>
+                    <input type="text" id="ficha-form-nome" value="`+nome+`">
+                    <p>Classe</p>
+                    <select id="ficha-form-classe">
+                        <option disabled value=""></option>
+                        <option `+(('combatente' == classe) ? 'selected' : '')+` value="combatente">Combatente</option>
+                        <option `+(('investigador' == classe) ? 'selected' : '')+` value="investigador">Investigador</option>
+				    </select>
+                    <p>Idade</p>
+                    <input type="number" id="ficha-form-idade" value="`+idade+`">
+                    <p>Nacionalidade</p>
+                    <input type="text" id="ficha-form-nacionalidade" value="`+nacionalidade+`">
+                </div>
+                <div>
+                    <p>Deslocamento</p>
+                    <input type="text" id="ficha-form-deslocamento" value="`+deslocamento+`">
+                    <p>Exposição</p>
+                    <select id="ficha-form-exposicao">
+                        <option disabled value=""></option>
+                        <option `+(('0' == exposicao) ? 'selected' : '')+` value="0">0%</option>
+                        <option `+(('5' == exposicao) ? 'selected' : '')+` value="5">5%</option>
+                        <option `+(('10' == exposicao) ? 'selected' : '')+` value="10">10%</option>
+                        <option `+(('15' == exposicao) ? 'selected' : '')+` value="15">15%</option>
+                        <option `+(('20' == exposicao) ? 'selected' : '')+` value="20">20%</option>
+                        <option `+(('25' == exposicao) ? 'selected' : '')+` value="25">25%</option>
+                        <option `+(('30' == exposicao) ? 'selected' : '')+` value="30">30%</option>
+                        <option `+(('35' == exposicao) ? 'selected' : '')+` value="35">35%</option>
+                        <option `+(('40' == exposicao) ? 'selected' : '')+` value="40">40%</option>
+                        <option `+(('45' == exposicao) ? 'selected' : '')+` value="45">45%</option>
+                        <option `+(('50' == exposicao) ? 'selected' : '')+` value="50">50%</option>
+                        <option `+(('55' == exposicao) ? 'selected' : '')+` value="55">55%</option>
+                        <option `+(('60' == exposicao) ? 'selected' : '')+` value="60">60%</option>
+                        <option `+(('65' == exposicao) ? 'selected' : '')+` value="65">65%</option>
+                        <option `+(('70' == exposicao) ? 'selected' : '')+` value="70">70%</option>
+                        <option `+(('75' == exposicao) ? 'selected' : '')+` value="75">75%</option>
+                        <option `+(('80' == exposicao) ? 'selected' : '')+` value="80">80%</option>
+                        <option `+(('85' == exposicao) ? 'selected' : '')+` value="85">85%</option>
+                        <option `+(('90' == exposicao) ? 'selected' : '')+` value="90">90%</option>
+                        <option `+(('95' == exposicao) ? 'selected' : '')+` value="95">95%</option>
+                        <option `+(('99' == exposicao) ? 'selected' : '')+` value="99">99%</option>
+                    </select>
+                    <p>Origem</p>
+                    <input type="text" id="ficha-form-origem" value="`+origem+`">
+                    <p>Trilha</p>
+                    <input type="text" id="ficha-form-trilha" value="`+trilha+`">
+                </div>
+            </div>
+            <div>
+                <p>Imagem</p>
+                <input type="file" accept="image/png, image/jpeg, image/gif" id="ficha-form-imagem">
+                <label for="ficha-form-imagem">
+                    <ion-icon name="folder-open"></ion-icon>Escolha uma imagem...
+                </label>
+                <button id="btn-ficha-edit-update">Salvar</button>
+            </div>
+        </div>
+    </div>
+    `);
+    openWindow(window);
+});
+
+$('body').on('click', '#btn-ficha-edit-update', () => {
+    let nome = $('#ficha-form-nome').val();
+    let classe = $('#ficha-form-classe').val();
+    let idade = $('#ficha-form-idade').val();
+    let nacionalidade = $('#ficha-form-nacionalidade').val();
+    let deslocamento = $('#ficha-form-deslocamento').val();
+    let exposicao = $('#ficha-form-exposicao').val();
+    let origem = $('#ficha-form-origem').val();
+    let trilha = $('#ficha-form-trilha').val();
+    let imagem = $('#ficha-form-imagem').prop('files')[0];
+
+    let formdata = new FormData();
+
+    formdata.append('action', 'ficha-update');
+    formdata.append('imagem', imagem);
+    formdata.append('nome', nome);
+    formdata.append('classe', classe);
+    formdata.append('idade', idade);
+    formdata.append('nacionalidade', nacionalidade);
+    formdata.append('deslocamento', deslocamento);
+    formdata.append('exposicao', exposicao);
+    formdata.append('origem', origem);
+    formdata.append('trilha', trilha);
+
+    $.ajax({
+		url: AJAXURL,
+		method: 'post',
+        contentType: false,
+        processData: false,
+        cache: false,
+        data: formdata,
+        beforeSend: ()=>{
+            $('#btn-ficha-edit-update').css('display', 'none');
+        }
+	}).done((data)=>{
+		if ($.parseJSON(data) == 'Sucesso') {
+            location.reload();
+            return;
+        }
+        alert($.parseJSON(data));
+        $('#btn-ficha-edit-update').css('display', 'flex');
 	});
 });
 
@@ -158,7 +362,7 @@ $('body').on('click', '.skill-single', (event) => {
     interval = setInterval(() => {
         if (currentInterval < Math.abs(elAttr) && currentInterval < 10) {
             currentInterval++;
-            let random = (Math.floor((Math.random() * 20 + 1) + elValue + elBonus));
+            let random = (Math.floor((Math.random() * 20 + 1)));
             let span = $('<span>'+random+'</span>');
             $('.dice-values').append(span);
             span.fadeIn();
@@ -168,9 +372,9 @@ $('body').on('click', '.skill-single', (event) => {
             if (random > bestDice) bestDice = random;
         } else {
             if (elAttr > 0) {
-                $('#dice-value').html(bestDice);
+                $('#dice-value').html(bestDice + elValue + elBonus);
             } else {
-                $('#dice-value').html(worstDice);
+                $('#dice-value').html(worstDice + elValue + elBonus);
             }
             $('#dice-value').fadeIn();
             clearInterval(interval);
@@ -184,10 +388,12 @@ $('body').on('click', '.skill-select-button', (event) => {
     let el = $(event.target).closest('.skill-select-button');
     let elValue = el.attr('value');
     let elParentName = el.closest('.window-skill-box').attr('name');
+    let elBonus = el.parent().parent().attr('bonus');
     let buttons = el.closest('.buttons').find('.skill-select-button');
     buttons.removeClass('selected');
     el.addClass('selected');
     changedSkills.push({[elParentName]: elValue});
+    changedSkills.push({[elParentName+'_bonus']: elBonus});
 });
 
 var resetAttributesStyle = () => {
@@ -270,9 +476,11 @@ $('body').on('click', '#btn-skills-update', () => {
 
 $('body').on('input', '.bonus-input', (event)=>{
     let el = $(event.target);
-    let elValue = el.val();
-    let elName = el.closest('.window-skill-box').attr('name') + '_bonus';
+    let elBonus = el.val();
+    let elValue = el.closest('.window-skill-box').attr('value');
+    let elName = el.closest('.window-skill-box').attr('name');
     changedSkills.push({[elName]: elValue});
+    changedSkills.push({[elName + '_bonus']: elBonus});
 }); 
 
 var changedAttributes = [];
@@ -285,7 +493,7 @@ $('body').on('input', '.attributes-input', (event)=>{
 
 $('body').on('click', '#power-add', () => {
     let window = $(`
-    <div class="window-container" id="powers-add-window" tempWindow=true">
+    <div class="window-container" id="powers-add-window" tempWindow=true>
         <div class="btn-close">
             <ion-icon name="close-outline"></ion-icon>
         </div><!-- btn-close -->
@@ -385,7 +593,7 @@ $('body').on('click', '.btn-power-edit', (event) => {
     let elDescription = el.attr('description');
     let elPowerId = el.attr('powerid');
     let window = $(`
-    <div class="window-container" id="powers-edit-window" powerid="`+elPowerId+`" tempWindow=true">
+    <div class="window-container" id="powers-edit-window" powerid="`+elPowerId+`" tempWindow=true>
         <div class="btn-close">
             <ion-icon name="close-outline"></ion-icon>
         </div><!-- btn-close -->
@@ -404,7 +612,7 @@ $('body').on('click', '.btn-power-edit', (event) => {
 
 $('body').on('click', '#btn-attack-add', () => {
     let window = $(`
-    <div class="window-container" id="attack-add-window" tempWindow=true">
+    <div class="window-container" id="attack-add-window" tempWindow=true>
         <div class="btn-close">
             <ion-icon name="close-outline"></ion-icon>
         </div><!-- btn-close -->
@@ -503,7 +711,7 @@ $('body').on('click', '.btn-attack-edit', (event) => {
     let elAtaqueId = el.attr('ataqueid');
 
     let window = $(`
-    <div class="window-container" id="attack-edit-window" ataqueid="`+elAtaqueId+`" tempWindow=true">
+    <div class="window-container" id="attack-edit-window" ataqueid="`+elAtaqueId+`" tempWindow=true>
         <div class="btn-close">
             <ion-icon name="close-outline"></ion-icon>
         </div><!-- btn-close -->
@@ -621,7 +829,7 @@ $('body').on('click', '#btn-attack-edit-update', () => {
 
 $('body').on('click', '#btn-inventory-add', () => {
     let window = $(`
-    <div class="window-container" id="inventory-add-window" tempWindow=true">
+    <div class="window-container" id="inventory-add-window" tempWindow=true>
         <div class="btn-close">
             <ion-icon name="close-outline"></ion-icon>
         </div><!-- btn-close -->
@@ -701,7 +909,7 @@ $('body').on('click', '.btn-inventory-edit', (event) => {
     let elInventarioId = el.attr('inventarioid');
 
     let window = $(`
-    <div class="window-container" id="inventory-edit-window" inventarioid="`+elInventarioId+`" tempWindow=true">
+    <div class="window-container" id="inventory-edit-window" inventarioid="`+elInventarioId+`" tempWindow=true>
         <div class="btn-close">
             <ion-icon name="close-outline"></ion-icon>
         </div><!-- btn-close -->

@@ -96,6 +96,7 @@ header {
 		flex-direction: column;
 		gap: 25px;
 		overflow-y: auto;
+		overflow-x: hidden;
 
 		.content-box {
 			display: flex;
@@ -110,7 +111,7 @@ header {
 	}
 }
 
-@media screen and(max-width: 1280px) {
+@media screen and(max-width: 1367px) {
 	.main {
 		.sidebar {
 			transition: 0.5s;
@@ -122,6 +123,18 @@ header {
 		}
 		.content {
 			width: 100%;
+		}
+	}
+}
+
+@media screen and(max-width: 768px) {
+	.content {
+		padding: 0 !important;
+
+		.content-box {
+			justify-content: center;
+			padding: 25px 10px !important;
+			border: 0 !important;
 		}
 	}
 }

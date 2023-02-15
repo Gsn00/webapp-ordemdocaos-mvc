@@ -15,6 +15,7 @@ $textShadow: 2px 2px 10px rgba(40,40,40,0.2);
 	text-decoration: none;
 	list-style-type: none;
 	font-family: 'Montserrat-Light', Arial;
+	scrollbar-width: thin;
 }
 
 body {
@@ -66,9 +67,8 @@ body {
 
 .container {
 	width: 100%;
-	max-width: 1280px;
 	margin: 0 auto;
-	padding: 0 5%;
+	padding: 0 2%;
 }
 
 .w50 {
@@ -167,6 +167,7 @@ input, textarea, select {
 }
 
 textarea {
+	min-height: 150px;
 	height: 300px;
 	border: 1px solid white;
 	border-radius: $borderRadius;
@@ -174,6 +175,7 @@ textarea {
 }
 
 select {
+	display: inline-block;
 	padding: 0 10px;
 }
 
@@ -181,6 +183,10 @@ input[type=file] {
 	border: 0;
 	cursor: pointer;
 	display: none;
+}
+
+input[type=number] {
+	-moz-appearance: textfield;
 }
 
 //Remove arrows from input type=number
@@ -246,7 +252,7 @@ label[for=ficha-form-imagem] {
 		overflow-y: auto;
 		width: 100%;
 		padding: 0px 60px;
-
+		
 		.window-compact {
 			display: flex;
 			flex-wrap: wrap;
@@ -305,9 +311,10 @@ label[for=ficha-form-imagem] {
 		.split {
 			display: flex;
 			gap: 60px;
-		}
-		input {
-			margin-bottom: 15px;
+
+			input, select {
+				margin-bottom: 15px;
+			}
 		}
 		button {
 			align-self: flex-start;
@@ -376,12 +383,40 @@ label[for=ficha-form-imagem] {
 
 /* FIM CLASSES AUXILIARES */
 
-@media screen and(max-width: 1280px) {
+@media screen and(max-width: 1367px) {
 	.mobile-menu-btn {
 		visibility: visible;
 	}
 }
 
 @media screen and(max-width: 768px) {
+	.inlineFlex {
+		flex-direction: column !important;
+	}
 
+	.window-container {
+		height: 70vh;
+		margin-top: 30px;
+
+		.window {
+			align-items: center;
+			padding: 0 5%;
+
+			div {
+				width: 100%;
+			}
+			button {
+				margin: 10px auto;
+			}
+			.split {
+				flex-direction: column;
+				gap: 0;
+			}
+			.window-compact {
+				.window-compact-box {
+					width: 100%;
+				}
+			}
+		}
+	}
 }

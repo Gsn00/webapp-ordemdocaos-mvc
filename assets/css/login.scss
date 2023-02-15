@@ -58,3 +58,13 @@ form {
 	color: white;
 	gap: 25px;
 }
+
+@media screen and (max-width: 1024px) {
+	.about-rpg {
+		display: none;
+	}
+	.form-wrapper {
+		width: 100%;
+		padding: 0 3%;
+	}
+}

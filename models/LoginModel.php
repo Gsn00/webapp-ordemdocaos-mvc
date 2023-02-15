@@ -37,7 +37,7 @@ class LoginModel extends Model {
             return 'Insira um email válido.';
         }
         if (strlen($user) < 5) {
-            return 'O usuário deve conter no mínimo 3 caracteres.';
+            return 'O usuário deve conter no mínimo 5 caracteres.';
         } 
         if (strlen($password) < 5) {
             return 'A senha deve conter no mínimo 5 caracteres.';
