@@ -77,7 +77,6 @@ class FichaModel extends Model {
                             $_SESSION['ordemdocaos']['ataques'][$value['id']]['alcance'] = $value['alcance'];
                             $_SESSION['ordemdocaos']['ataques'][$value['id']]['dano'] = $value['dano'];
                             $_SESSION['ordemdocaos']['ataques'][$value['id']]['critico'] = $value['critico'];
-                            $_SESSION['ordemdocaos']['ataques'][$value['id']]['recarga'] = $value['recarga'];
                             $_SESSION['ordemdocaos']['ataques'][$value['id']]['especial'] = $value['especial'];
                         }
                     }
@@ -97,8 +96,50 @@ class FichaModel extends Model {
                     }
                 }
             }
+            $this->checkBarValues();
         } catch (\Throwable $th) {
             \Utils::alert('Não foi possível carregar a página');
+        }
+    }
+
+    function checkBarValues() {
+        if (isset($_SESSION['ordemdocaos'])) {
+            $queryBegin = "UPDATE `tb_rpg.ordemdocaos.players` SET ";
+            $queryMiddle = "";
+            $queryEnd = " WHERE user_id=".$_SESSION['id'].";";
+
+            $prefix = $_SESSION['ordemdocaos']['geral'];
+            $bars = [
+                'vida' => $prefix['vida'],
+                'sanidade' => $prefix['sanidade'],
+                'esforco' => $prefix['esforco']
+            ];
+            $count = 0;
+            foreach ($bars as $key => $value) {
+                if (intval($value) > intval($prefix['max_'.$key])) {
+                    if ($count > 0) {
+                        $queryMiddle .= ", ".$key."=".$prefix['max_'.$key]." ";
+                    } else {
+                        $queryMiddle .= $key."=".$prefix['max_'.$key]." ";
+                    }
+                    $_SESSION['ordemdocaos']['geral'][$key] = $prefix['max_'.$key];
+                    $count++;
+                }
+                if (intval($value) < 0) {
+                    if ($count > 0) {
+                        $queryMiddle .= ", ".$key."=0 ";
+                    } else {
+                        $queryMiddle .= $key."=0";
+                    }
+                    $_SESSION['ordemdocaos']['geral'][$key] = 0;
+                    $count++;
+                }
+                if ($count > 0) {
+                    $query = $queryBegin . $queryMiddle . $queryEnd;
+                    $sql = \MySQL::connect()->prepare($query);
+                    $sql->execute();
+                }
+            }
         }
     }
 
@@ -111,6 +152,10 @@ class FichaModel extends Model {
             foreach ($_SESSION['ordemdocaos']['geral'] as $key => $value) {
                 $vars[$key] = $value;
             }
+            $vars['defesa'] = $this->getDefense();
+            $vars['bloqueio'] = $this->getBlock();
+            $vars['esquiva'] = $this->getDodge();
+
             foreach ($_SESSION['ordemdocaos']['atributos'] as $key => $value) {
                 $vars['atributos'][$key] = $value;
             }
@@ -171,17 +216,22 @@ class FichaModel extends Model {
         }
     }
 
-    function getDefense($agilidade) {
+    function getDefense() {
+        $agilidade = $_SESSION['ordemdocaos']['atributos']['agilidade'];
         $agilidade = intval($agilidade);
         return 10 + $agilidade;
     }
 
-    function getBlock($fortitude) {
+    function getBlock() {
+        $fortitude = $_SESSION['ordemdocaos']['pericias']['fortitude'];
+        $fortitude += $_SESSION['ordemdocaos']['pericias_bonus']['fortitude'];
         $fortitude = intval($fortitude);
         return $fortitude;
     }
 
-    function getDodge($reflexos) {
+    function getDodge() {
+        $reflexos = $_SESSION['ordemdocaos']['pericias']['reflexos'];
+        $reflexos += $_SESSION['ordemdocaos']['pericias_bonus']['reflexos'];
         $reflexos = intval($reflexos);
         return $reflexos;
     }
@@ -220,9 +270,6 @@ class FichaModel extends Model {
             $maxEsforco = $esforco;
             $sanidade = $this->getMaxSanity($classe, $exposicao);
             $maxSanidade = $sanidade;
-            $defesa = $this->getDefense(1);
-            $bloqueio = $this->getBlock(0);
-            $esquiva = $this->getDodge(0);
 
             $fields = [
                 $userId,
@@ -242,17 +289,14 @@ class FichaModel extends Model {
                 $sanidade,
                 $maxSanidade,
                 $esforco,
-                $maxEsforco,
-                $defesa,
-                $bloqueio,
-                $esquiva
+                $maxEsforco
             ];
 
             if (in_array('ordemdocaos', $_SESSION['rpg-list']))
                 return 'Você já participa dessa mesa.';
 
             $sql = \MySQL::connect()->prepare('INSERT INTO `tb_rpg.ordemdocaos.players` 
-            VALUES (null,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)');
+            VALUES (null,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)');
             if (!$sql->execute($fields))
                 throw new \Exception("Ocorreu um erro ao tentar criar a ficha", 1);
 
@@ -424,16 +468,6 @@ class FichaModel extends Model {
             $count = 0;
             $countAttr = 0;
             foreach($attributes as $key => $value) {
-                if ($key == 'agilidade') {
-                    $defesa = $this->getDefense($value);
-                    $_SESSION['ordemdocaos']['geral']['defesa'] = $defesa;
-                    if ($countAttr == 0) {
-                        $newQueryMiddle .= "defesa=".$defesa." ";
-                    } else {
-                        $newQueryMiddle .= ", defesa=".$defesa." ";
-                    }
-                    $countAttr++;
-                }
                 if ($key == 'vigor') {
                     $maxVida = $this->getMaxHealth($classe, $exposicao, intval($value));
                     $_SESSION['ordemdocaos']['geral']['max_vida'] = $maxVida;
@@ -488,34 +522,11 @@ class FichaModel extends Model {
             $queryEnd = " WHERE user_id=".$_SESSION['id'].";";
 
             $count = 0;
-            $skillsToSum = [];
             foreach($skills as $key => $value) {
                 if (str_contains($key, '_bonus')) {
                     $_SESSION['ordemdocaos']['pericias_bonus'][explode('_bonus', $key)[0]] = $value;
-                    
-                    if ($key == 'fortitude_bonus') {
-                        $skillsToSum['bloqueio'] = isset($skillsToSum['bloqueio']) 
-                        ? $skillsToSum['bloqueio'] += intval($value)
-                        : $skillsToSum['bloqueio'] = intval($value);
-                    }
-                    if ($key == 'reflexos_bonus') {
-                        $skillsToSum['esquiva'] = isset($skillsToSum['esquiva']) 
-                        ? $skillsToSum['esquiva'] += intval($value)
-                        : $skillsToSum['esquiva'] = intval($value);
-                    }
                 } else {
                     $_SESSION['ordemdocaos']['pericias'][$key] = $value;
-
-                    if ($key == 'fortitude') {
-                        $skillsToSum['bloqueio'] = isset($skillsToSum['bloqueio']) 
-                        ? $skillsToSum['bloqueio'] += intval($value)
-                        : $skillsToSum['bloqueio'] = intval($value);
-                    }
-                    if ($key == 'reflexos') {
-                        $skillsToSum['esquiva'] = isset($skillsToSum['esquiva']) 
-                        ? $skillsToSum['esquiva'] += intval($value)
-                        : $skillsToSum['esquiva'] = intval($value);
-                    }
                 }
                 $count++;
                 if ($count < sizeof($skills)) {
@@ -525,35 +536,8 @@ class FichaModel extends Model {
                 }
             }
 
-            $newQueryBegin = "UPDATE `tb_rpg.ordemdocaos.players` SET ";
-            $newQueryMiddle = "";
-            $newQueryEnd = " WHERE user_id=".$_SESSION['id'].";";
-
-            $countSkill = 0;
-            foreach ($skillsToSum as $key => $value) {
-                if ($key == 'bloqueio') {
-                    $item = $this->getBlock($value);
-                }
-                if ($key == 'esquiva') {
-                    $item = $this->getDodge($value);
-                }
-
-                $_SESSION['ordemdocaos']['geral'][$key] = $item;
-                if ($countSkill == 0) {
-                    $newQueryMiddle .= $key."=".$item." ";
-                } else {
-                    $newQueryMiddle .= ", ".$key."=".$item." ";
-                }
-                $countSkill++;
-            }
-
             if ($count > 0) {
-                if ($countSkill > 0) {
-                    $query = $queryBegin . $queryMiddle . $queryEnd . 
-                    $newQueryBegin. $newQueryMiddle . $newQueryEnd;
-                } else {
-                    $query = $queryBegin . $queryMiddle . $queryEnd;
-                }
+                $query = $queryBegin . $queryMiddle . $queryEnd;
                 $sql = \MySQL::connect()->prepare($query);
                 $sql->execute();
             }
@@ -632,7 +616,7 @@ class FichaModel extends Model {
             $userId = $_SESSION['id'];
             $sql = \MySQL::connect();
             $query = $sql->prepare("INSERT INTO `tb_rpg.ordemdocaos.ataques` 
-            VALUES (null,?,?,?,?,?,?,?,?,?)");
+            VALUES (null,?,?,?,?,?,?,?,?)");
             $query->execute($arr);
             $lastId = $sql->lastInsertId();
 
@@ -642,8 +626,7 @@ class FichaModel extends Model {
             $_SESSION['ordemdocaos']['ataques'][$lastId]['alcance'] = $arr[4];
             $_SESSION['ordemdocaos']['ataques'][$lastId]['dano'] = $arr[5];
             $_SESSION['ordemdocaos']['ataques'][$lastId]['critico'] = $arr[6];
-            $_SESSION['ordemdocaos']['ataques'][$lastId]['recarga'] = $arr[7];
-            $_SESSION['ordemdocaos']['ataques'][$lastId]['especial'] = $arr[8];
+            $_SESSION['ordemdocaos']['ataques'][$lastId]['especial'] = $arr[7];
 
             return 'Sucesso';
         } catch (\Throwable $th) {
@@ -676,11 +659,11 @@ class FichaModel extends Model {
 
             $userId = $_SESSION['id'];
             $sql = \MySQL::connect()->prepare("UPDATE `tb_rpg.ordemdocaos.ataques` 
-            SET arma=?, tipo=?, ataque=?, alcance=?, dano=?, critico=?, recarga=?, especial=?
+            SET arma=?, tipo=?, ataque=?, alcance=?, dano=?, critico=?, especial=?
             WHERE id=? AND user_id=?");
             $sql->execute($arr);
 
-            $ataqueId = $arr[8];
+            $ataqueId = $arr[7];
 
             $_SESSION['ordemdocaos']['ataques'][$ataqueId]['arma'] = $arr[0];
             $_SESSION['ordemdocaos']['ataques'][$ataqueId]['tipo'] = $arr[1];
@@ -688,8 +671,7 @@ class FichaModel extends Model {
             $_SESSION['ordemdocaos']['ataques'][$ataqueId]['alcance'] = $arr[3];
             $_SESSION['ordemdocaos']['ataques'][$ataqueId]['dano'] = $arr[4];
             $_SESSION['ordemdocaos']['ataques'][$ataqueId]['critico'] = $arr[5];
-            $_SESSION['ordemdocaos']['ataques'][$ataqueId]['recarga'] = $arr[6];
-            $_SESSION['ordemdocaos']['ataques'][$ataqueId]['especial'] = $arr[7];
+            $_SESSION['ordemdocaos']['ataques'][$ataqueId]['especial'] = $arr[6];
 
             return 'Sucesso';
         } catch (\Throwable $th) {
@@ -770,6 +752,10 @@ class FichaModel extends Model {
             if ($current > $max) $current = $max;
             if ($current < 0) $current = 0;
             $_SESSION['ordemdocaos']['geral'][$bar] = $current;
+
+            $sql = \MySQL::connect()->prepare("UPDATE `tb_rpg.ordemdocaos.players` 
+            SET ".$bar."=? WHERE user_id=?");
+            $sql->execute(array($current, $_SESSION['id']));
 
             return 'Sucesso';
         } catch (\Throwable $th) {

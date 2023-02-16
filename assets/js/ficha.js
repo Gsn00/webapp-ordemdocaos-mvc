@@ -388,12 +388,10 @@ $('body').on('click', '.skill-select-button', (event) => {
     let el = $(event.target).closest('.skill-select-button');
     let elValue = el.attr('value');
     let elParentName = el.closest('.window-skill-box').attr('name');
-    let elBonus = el.parent().parent().attr('bonus');
     let buttons = el.closest('.buttons').find('.skill-select-button');
     buttons.removeClass('selected');
     el.addClass('selected');
     changedSkills.push({[elParentName]: elValue});
-    changedSkills.push({[elParentName+'_bonus']: elBonus});
 });
 
 var resetAttributesStyle = () => {
@@ -427,7 +425,6 @@ $('body').on('click', '#btn-attributes-update', ()=>{
     let formdata = new FormData();
     formdata.append('action', 'attributes-update');
     formdata.append('attributes', JSON.stringify(changedAttributes));
-    console.log(changedAttributes)
 
     $.ajax({
 		url: AJAXURL,
@@ -477,9 +474,7 @@ $('body').on('click', '#btn-skills-update', () => {
 $('body').on('input', '.bonus-input', (event)=>{
     let el = $(event.target);
     let elBonus = el.val();
-    let elValue = el.closest('.window-skill-box').attr('value');
     let elName = el.closest('.window-skill-box').attr('name');
-    changedSkills.push({[elName]: elValue});
     changedSkills.push({[elName + '_bonus']: elBonus});
 }); 
 
@@ -642,10 +637,6 @@ $('body').on('click', '#btn-attack-add', () => {
                 <input id="attack-add-critico" type="text" value="">
             </div>
             <div>
-                <p>Recarga</p>
-                <input id="attack-add-recarga" type="text" value="">
-            </div>
-            <div>
                 <p>Especial</p>
                 <select id="attack-add-especial">
                     <option value="não">Não</option>
@@ -667,7 +658,6 @@ $('body').on('click', '#btn-attack-add-save', () => {
     let elAlcance = $('#attack-add-alcance').val();
     let elDano = $('#attack-add-dano').val();
     let elCritico = $('#attack-add-critico').val();
-    let elRecarga = $('#attack-add-recarga').val();
     let elEspecial = $('#attack-add-especial').val();
 
     $.ajax({
@@ -682,7 +672,6 @@ $('body').on('click', '#btn-attack-add-save', () => {
             'alcance': elAlcance,
             'dano': elDano,
             'critico': elCritico,
-            'recarga': elRecarga,
             'especial': elEspecial
         },
         beforeSend: ()=>{
@@ -706,7 +695,6 @@ $('body').on('click', '.btn-attack-edit', (event) => {
     let elAlcance = el.attr('alcance');
     let elDano = el.attr('dano');
     let elCritico = el.attr('critico');
-    let elRecarga = el.attr('recarga');
     let elEspecial = el.attr('especial');
     let elAtaqueId = el.attr('ataqueid');
 
@@ -739,10 +727,6 @@ $('body').on('click', '.btn-attack-edit', (event) => {
             <div>
                 <p>Crítico</p>
                 <input id="attack-edit-critico" type="number" value="`+elCritico+`">
-            </div>
-            <div>
-                <p>Recarga</p>
-                <input id="attack-edit-recarga" type="number" value="`+elRecarga+`">
             </div>
             <div>
                 <p>Especial</p>
@@ -794,7 +778,6 @@ $('body').on('click', '#btn-attack-edit-update', () => {
     let elAlcance = el.find('#attack-edit-alcance').val();
     let elDano = el.find('#attack-edit-dano').val();
     let elCritico = el.find('#attack-edit-critico').val();
-    let elRecarga = el.find('#attack-edit-recarga').val();
     let elEspecial = el.find('#attack-edit-especial').val();
     let elAtaqueId = el.attr('ataqueid');
 
@@ -811,7 +794,6 @@ $('body').on('click', '#btn-attack-edit-update', () => {
             'alcance': elAlcance,
             'dano': elDano,
             'critico': elCritico,
-            'recarga': elRecarga,
             'especial': elEspecial
         },
         beforeSend: ()=>{
@@ -845,6 +827,7 @@ $('body').on('click', '#btn-inventory-add', () => {
             <div>
                 <p>Categoria</p>
                 <select id="inventory-add-categoria">
+                    <option disabled selected value=""></option>
                     <option value="0">0</option>
                     <option value="1">1</option>
                     <option value="2">2</option>
@@ -855,11 +838,11 @@ $('body').on('click', '#btn-inventory-add', () => {
             <div>
                 <p>Tipo</p>
                 <select id="inventory-add-tipo">
-                    <option value="0">0</option>
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
+                    <option disabled selected value=""></option>
+                    <option value="corte">Corte</option>
+                    <option value="impacto">Impacto</option>
+                    <option value="perfuração">Perfuração</option>
+                    <option value="balistico">Balístico</option>
                 </select>
             </div>
             

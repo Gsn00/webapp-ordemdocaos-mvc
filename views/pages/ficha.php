@@ -297,7 +297,6 @@
 					<th>Alcance</th>
 					<th>Dano</th>
 					<th>Crítico</th>
-					<th>Recarga</th>
 					<th>Especial</th>
 					<th></th>
 				</thead>
@@ -305,15 +304,13 @@
 				<tr class="attack-single" ataqueid="<?= $key ?>" arma="<?= $value['arma'] ?>" 
 				tipo="<?= $value['tipo'] ?>" ataque="<?= $value['ataque'] ?>" 
 				alcance="<?= $value['alcance'] ?>" dano="<?= $value['dano'] ?>" 
-				critico="<?= $value['critico'] ?>" recarga="<?= $value['recarga'] ?>"
-				especial="<?= $value['especial'] ?>">
+				critico="<?= $value['critico'] ?>" especial="<?= $value['especial'] ?>">
 					<td data-label="Arma"><?= ucfirst($value['arma']) ?></td>
 					<td data-label="Tipo"><?= ucfirst($value['tipo']) ?></td>
 					<td data-label="Ataque"><?= ucfirst($value['ataque']) ?></td>
 					<td data-label="Alcance"><?= ucfirst($value['alcance']) ?></td>
 					<td data-label="Dano"><?= strtoupper($value['dano']) ?></td>
 					<td data-label="Crítico"><?= $value['critico'] ?></td>
-					<td data-label="Recarga"><?= $value['recarga'] ?></td>
 					<td data-label="Especial"><?= ucfirst($value['especial']) ?></td>
 					<td class="inventory-edit">
 						<ion-icon class="btn-attack-edit" name="create-outline"></ion-icon>

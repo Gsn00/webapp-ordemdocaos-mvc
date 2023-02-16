@@ -131,10 +131,9 @@ if ($_POST['action'] == 'attack-add') {
     $alcance = $_POST['alcance'];
     $dano = $_POST['dano'];
     $critico = $_POST['critico'];
-    $recarga = $_POST['recarga'];
     $especial = $_POST['especial'];
 
-    $arr = array($userId, $arma, $tipo, $ataque, $alcance, $dano, $critico, $recarga, $especial);
+    $arr = array($userId, $arma, $tipo, $ataque, $alcance, $dano, $critico, $especial);
 
     $status = $model->addAttack($arr);
     die(json_encode($status));
@@ -158,12 +157,11 @@ if ($_POST['action'] == 'attack-update') {
     $alcance = $_POST['alcance'];
     $dano = $_POST['dano'];
     $critico = $_POST['critico'];
-    $recarga = $_POST['recarga'];
     $especial = $_POST['especial'];
     $ataqueId = $_POST['ataqueid'];
     $userId = $_SESSION['id'];
 
-    $arr = array($arma, $tipo, $ataque, $alcance, $dano, $critico, $recarga, $especial, 
+    $arr = array($arma, $tipo, $ataque, $alcance, $dano, $critico, $especial, 
     $ataqueId, $userId);
      
     $status = $model->updateAttack($arr);
