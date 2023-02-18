@@ -68,7 +68,7 @@ $(document).ready(() => {
     configBars();
 })
 
-let updateBar = (bar, current) => { 
+let updateBar = (bar, current) => {
     $.ajax({
 		url: AJAXURL,
 		method: 'post',
@@ -79,10 +79,8 @@ let updateBar = (bar, current) => {
             'current': current
         }
 	}).done((data)=>{
-		if (data == 'Sucesso') {
-            return;
-        }
-        alert(data);
+        ajaxDone(data, ()=>{}, false);
+        return;
 	});
 }
 
@@ -139,15 +137,12 @@ $('body').on('click', '#btn-ficha-create', ()=>{
         cache: false,
         data: formdata,
         beforeSend: ()=>{
-            $('#btn-ficha-create').css('display', 'none');
+            $('#btn-ficha-create').css('filter', 'grayscale(1)').prop('disabled', true);
         }
 	}).done((data)=>{
-		if ($.parseJSON(data) == 'Sucesso') {
-            location.reload();
-            return;
-        }
-        alert($.parseJSON(data));
-        $('#btn-ficha-create').css('display', 'flex');
+		ajaxDone(data, ()=>{
+            $('#btn-ficha-create').css('filter', 'grayscale(0)').prop('disabled', false);
+        });
 	});
 });
 
@@ -263,15 +258,12 @@ $('body').on('click', '#btn-ficha-edit-update', () => {
         cache: false,
         data: formdata,
         beforeSend: ()=>{
-            $('#btn-ficha-edit-update').css('display', 'none');
+            $('#btn-ficha-edit-update').css('filter', 'grayscale(1)').prop('disabled', true);
         }
 	}).done((data)=>{
-		if ($.parseJSON(data) == 'Sucesso') {
-            location.reload();
-            return;
-        }
-        alert($.parseJSON(data));
-        $('#btn-ficha-edit-update').css('display', 'flex');
+		ajaxDone(data, ()=>{
+            $('#btn-ficha-edit-update').css('filter', 'grayscale(0)').prop('disabled', false)
+        });
 	});
 });
 
@@ -327,6 +319,57 @@ let el = $(event.target).closest('.ficha-attributes-single');
                 $('#dice-value').html(bestDice);
             } else {
                 $('#dice-value').html(worstDice);
+            }
+            $('#dice-value').fadeIn();
+            clearInterval(interval);
+        }
+    }, 1000);
+    openWindow(window);
+});
+
+$('body').on('click', '.btn-dice', (event) => {
+    let el = $(event.target);
+    let elSum = el.attr('sum');
+    let elInfo = deformButtonDice(el);
+    let elQuantity = elInfo.quantity;
+    let elDice = elInfo.dice;
+    let elPlus = elInfo.plus;
+
+    let window = $(`
+    <div id="window-dice" class="window-container" tempWindow=true>
+         <div class="btn-close">
+            <ion-icon name="close-outline"></ion-icon>
+        </div>
+        <div class="window">
+            <h2>`+elQuantity+`D`+elDice+((elPlus == 0) ? '' : ('+'+elPlus))+`</h2>
+            <div class="dice-values"></div>
+            <h1 id="dice-value"></h1>
+        </div>
+    </div>
+    `);
+
+    let values = [];
+    let bestDice = 0;
+    let currentInterval = 0;
+    interval = setInterval(() => {
+        if (currentInterval < elQuantity && currentInterval < 10) {
+            currentInterval++;
+            let random = (Math.floor((Math.random() * elDice + 1)));
+            let span = $('<span>'+random+'</span>');
+            values.push(random);
+            $('.dice-values').append(span);
+            span.fadeIn();
+            
+            if (random > bestDice) bestDice = random;
+        } else {
+            if (elSum == "false") {
+                $('#dice-value').html(bestDice + elPlus);
+            } else {
+                let sum = 0;
+                values.forEach(el => {
+                    sum += parseInt(el);
+                });
+                $('#dice-value').html(sum + elPlus);
             }
             $('#dice-value').fadeIn();
             clearInterval(interval);
@@ -434,15 +477,12 @@ $('body').on('click', '#btn-attributes-update', ()=>{
         cache: false,
         data: formdata,
         beforeSend: ()=>{
-            $('#btn-attributes-update').css('display', 'none');
+            $('#btn-attributes-update').css('filter', 'grayscale(1)').prop('disabled', true);
         }
 	}).done((data)=>{
-		if ($.parseJSON(data) == 'Sucesso') {
-            location.reload();
-            return;
-        }
-        alert($.parseJSON(data));
-        $('#btn-attributes-update').css('display', 'flex');
+		ajaxDone(data, ()=>{
+            $('#btn-attributes-update').css('filter', 'grayscale(0)').prop('disabled', false);
+        });
 	});
 });
 
@@ -459,15 +499,12 @@ $('body').on('click', '#btn-skills-update', () => {
         cache: false,
         data: formdata,
         beforeSend: ()=>{
-            $('#btn-skill-update').css('display', 'none');
+            $('#btn-skill-update').css('filter', 'grayscale(1)').prop('disabled', true);
         }
 	}).done((data)=>{
-		if ($.parseJSON(data) == 'Sucesso') {
-            location.reload();
-            return;
-        }
-        alert($.parseJSON(data));
-        $('#btn-skill-update').css('display', 'flex');
+		ajaxDone(data, ()=>{
+            $('#btn-skill-update').css('filter', 'grayscale(0)').prop('disabled', false);
+        });
 	});
 });
 
@@ -516,15 +553,12 @@ $('body').on('click', '#btn-power-add-save', () => {
             'description': elDescription
         },
         beforeSend: ()=>{
-            $('#btn-power-add-save').css('display', 'none');
+            $('#btn-power-add-save').css('filter', 'grayscale(1)').prop('disabled', true);
         }
 	}).done((data)=>{
-		if (data == 'Sucesso') {
-            location.reload();
-            return;
-        }
-        alert(data);
-        $('#btn-power-add-save').css('display', 'flex');
+		ajaxDone(data, ()=>{
+            $('#btn-power-add-save').css('filter', 'grayscale(0)').prop('disabled', false);
+        });
 	});
 })
 
@@ -541,15 +575,12 @@ $('body').on('click', '#btn-power-edit-delete', () => {
             'powerid': elPowerId
         },
         beforeSend: ()=>{
-            $('#btn-power-edit-delete').parent().css('display', 'none');
+            $('#btn-power-edit-delete').parent().css('filter', 'grayscale(1)').prop('disabled', true);
         }
 	}).done((data)=>{
-		if (data == 'Sucesso') {
-            location.reload();
-            return;
-        }
-        alert(data);
-        $('#btn-power-edit-delete').parent().css('display', 'flex');
+		ajaxDone(data, ()=>{
+            $('#btn-power-edit-delete').parent().css('filter', 'grayscale(0)').prop('disabled', false);
+        });
 	});
 })
 
@@ -570,15 +601,10 @@ $('body').on('click', '#btn-power-edit-update', () => {
             'description': elDescription
         },
         beforeSend: ()=>{
-            $('#btn-power-edit-update').parent().css('display', 'none');
+            $('#btn-power-edit-update').parent().css('filter', 'grayscale(1)').prop('disabled', true);
         }
 	}).done((data)=>{
-		if (data == 'Sucesso') {
-            location.reload();
-            return;
-        }
-        alert(data);
-        $('#btn-power-edit-update').parent().css('display', 'flex');
+		ajaxDone(data, ()=>{$('#btn-power-edit-update').parent().css('filter', 'grayscale(0)').prop('disabled', false);});
 	});
 })
 
@@ -605,6 +631,7 @@ $('body').on('click', '.btn-power-edit', (event) => {
     openWindow(window);
 })
 
+inputDice('#attack-add-ataque');
 $('body').on('click', '#btn-attack-add', () => {
     let window = $(`
     <div class="window-container" id="attack-add-window" tempWindow=true>
@@ -622,7 +649,7 @@ $('body').on('click', '#btn-attack-add', () => {
             </div>
             <div>
                 <p>Ataque</p>
-                <input id="attack-add-ataque" type="text" value="">
+                <input id="attack-add-ataque" type="text" value="" placeholder="Ex: 1D20+5">
             </div>
             <div>
                 <p>Alcance</p>
@@ -630,7 +657,7 @@ $('body').on('click', '#btn-attack-add', () => {
             </div>
             <div>
                 <p>Dano</p>
-                <input id="attack-add-dano" type="text" value="">
+                <input id="attack-add-dano" type="text" value="" placeholder="Ex: 1D20+5">
             </div>
             <div>
                 <p>Crítico</p>
@@ -675,15 +702,12 @@ $('body').on('click', '#btn-attack-add-save', () => {
             'especial': elEspecial
         },
         beforeSend: ()=>{
-            $('#btn-attack-add-save').css('display', 'none');
+            $('#btn-attack-add-save').css('filter', 'grayscale(1)').prop('disabled', true);
         }
 	}).done((data)=>{
-		if (data == 'Sucesso') {
-            location.reload();
-            return;
-        }
-        alert(data);
-        $('#btn-attack-add-save').css('display', 'flex');
+		ajaxDone(data, ()=>{
+            $('#btn-attack-add-save').css('filter', 'grayscale(0)').prop('disabled', false);
+        });
 	});
 })
 
@@ -758,15 +782,12 @@ $('body').on('click', '#btn-attack-edit-delete', () => {
             'ataqueid': elAtaqueId
         },
         beforeSend: ()=>{
-            $('#btn-attack-edit-delete').parent().css('display', 'none');
+            $('#btn-attack-edit-delete').parent().css('filter', 'grayscale(1)').prop('disabled', true);
         }
 	}).done((data)=>{
-		if (data == 'Sucesso') {
-            location.reload();
-            return;
-        }
-        alert(data);
-        $('#btn-attack-edit-delete').parent().css('display', 'flex');
+		ajaxDone(data, ()=>{
+            $('#btn-attack-edit-delete').parent().css('filter', 'grayscale(0)').prop('disabled', false);
+        });
 	});
 })
 
@@ -797,15 +818,12 @@ $('body').on('click', '#btn-attack-edit-update', () => {
             'especial': elEspecial
         },
         beforeSend: ()=>{
-            $('#btn-attack-edit-update').parent().css('display', 'none');
+            $('#btn-attack-edit-update').parent().css('filter', 'grayscale(1)').prop('disabled', true);
         }
 	}).done((data)=>{
-		if (data == 'Sucesso') {
-            location.reload();
-            return;
-        }
-        alert(data);
-        $('#btn-attack-edit-update').parent().css('display', 'flex');
+		ajaxDone(data, ()=>{
+            $('#btn-attack-edit-update').parent().css('filter', 'grayscale(0)').prop('disabled', false);
+        });
 	});
 })
 
@@ -871,15 +889,12 @@ $('body').on('click', '#btn-inventory-add-save', () => {
             'tipo': elTipo
         },
         beforeSend: ()=>{
-            $('#btn-inventory-add-save').css('display', 'none');
+            $('#btn-inventory-add-save').css('filter', 'grayscale(1)').prop('disabled', true);
         }
 	}).done((data)=>{
-		if (data == 'Sucesso') {
-            location.reload();
-            return;
-        }
-        alert(data);
-        $('#btn-inventory-add-save').css('display', 'flex');
+		ajaxDone(data, ()=>{
+            $('#btn-inventory-add-save').css('filter', 'grayscale(0)').prop('disabled', false);
+        });
 	});
 })
 
@@ -948,15 +963,12 @@ $('body').on('click', '#btn-inventory-edit-delete', () => {
             'inventarioid': elInventarioId
         },
         beforeSend: ()=>{
-            $('#btn-inventory-edit-delete').parent().css('display', 'none');
+            $('#btn-inventory-edit-delete').parent().css('filter', 'grayscale(1)').prop('disabled', true);
         }
 	}).done((data)=>{
-		if (data == 'Sucesso') {
-            location.reload();
-            return;
-        }
-        alert(data);
-        $('#btn-inventory-edit-delete').parent().css('display', 'flex');
+		ajaxDone(data, ()=>{
+            $('#btn-inventory-edit-delete').parent().css('filter', 'grayscale(0)').prop('disabled', false);
+        });
 	});
 })
 
@@ -981,14 +993,12 @@ $('body').on('click', '#btn-inventory-edit-update', () => {
             'tipo': elTipo
         },
         beforeSend: ()=>{
-            $('#btn-inventory-edit-update').parent().css('display', 'none');
+            $('#btn-inventory-edit-update').parent().css('filter', 'grayscale(1)').prop('disabled', true);
         }
     }).done((data)=>{
-        if (data == 'Sucesso') {
-            location.reload();
-            return;
-        }
-        alert(data);
-        $('#btn-inventory-edit-update').parent().css('display', 'flex');
+        ajaxDone(data, ()=>{
+            $('#btn-inventory-edit-update').parent().css('filter', 'grayscale(0)').prop('disabled', false);
+        });
     });
 })
+

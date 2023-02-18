@@ -23,11 +23,8 @@ $('body').on('click', '#register-action', (event)=>{
             'passwordRepeat': passwordRepeat
         }
 	}).done((data)=>{
-		if (data == 'Sucesso') {
-            location.reload();
-            return;
-        }
-        alert(data);
+		ajaxDone(data);
+	});
 	});
 });
 
@@ -46,10 +43,6 @@ $('body').on('click', '#login-action', (event)=>{
             'password': password
         }
 	}).done((data)=>{
-		if (data == 'Sucesso') {
-            location.reload();
-            return;
-        }
-        alert(data);
+		ajaxDone(data);
 	});
 });

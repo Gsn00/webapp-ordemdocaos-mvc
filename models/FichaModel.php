@@ -193,7 +193,8 @@ class FichaModel extends Model {
     }
 
     function getMaxHealth($classe, $exposicao, $vigor) {
-        $exposicao = ceil($exposicao / 5);
+        $exposicao = ceil(intval($exposicao) / 5);
+        $vigor = (intval($vigor) < 0) ? 0 : intval($vigor);
         if ($classe == 'combatente') {
             $vida = 20 + $vigor + ((4 + $vigor) * $exposicao);
             return $vida;
@@ -204,8 +205,21 @@ class FichaModel extends Model {
         }
     }
 
-    function getMaxEffort($classe, $exposicao, $presenca) {
+    function getMaxSanity($classe, $exposicao) {
         $exposicao = ceil($exposicao / 5);
+        if ($classe == 'combatente') {
+            $sanity = 12 + (3 * $exposicao);
+            return $sanity;
+        }
+        if ($classe == 'investigador') {
+            $sanity = 16 + (4 * $exposicao);
+            return $sanity;
+        }
+    }
+
+    function getMaxEffort($classe, $exposicao, $presenca) {
+        $exposicao = ceil(intval($exposicao) / 5);
+        $presenca = (intval($presenca) < 0) ? 0 : intval($presenca);
         if ($classe == 'combatente') {
             $effort = 2 + $presenca + ((2 + $presenca) * $exposicao);
             return $effort;
@@ -219,7 +233,7 @@ class FichaModel extends Model {
     function getDefense() {
         $agilidade = $_SESSION['ordemdocaos']['atributos']['agilidade'];
         $agilidade = intval($agilidade);
-        return 10 + $agilidade;
+        return 10 + $agilidade + $this->getDodge();
     }
 
     function getBlock() {
@@ -234,18 +248,6 @@ class FichaModel extends Model {
         $reflexos += $_SESSION['ordemdocaos']['pericias_bonus']['reflexos'];
         $reflexos = intval($reflexos);
         return $reflexos;
-    }
-
-    function getMaxSanity($classe, $exposicao) {
-        $exposicao = ceil($exposicao / 5);
-        if ($classe == 'combatente') {
-            $sanity = 12 + (3 * $exposicao);
-            return $sanity;
-        }
-        if ($classe == 'investigador') {
-            $sanity = 16 + (4 * $exposicao);
-            return $sanity;
-        }
     }
 
     function createFicha($userId, $nome, $classe, $idade, $nacionalidade, $deslocamento, 
@@ -339,15 +341,13 @@ class FichaModel extends Model {
                 $newImage = true;
             }
 
-            if ($exposicao != $_SESSION['ordemdocaos']['geral']['exposicao']) {
-                $vigor = intval($_SESSION['ordemdocaos']['atributos']['vigor']);
-                $presenca = intval($_SESSION['ordemdocaos']['atributos']['presenca']);
-                $peRodada = $this->getPeRound($exposicao);
+            $vigor = intval($_SESSION['ordemdocaos']['atributos']['vigor']);
+            $presenca = intval($_SESSION['ordemdocaos']['atributos']['presenca']);
+            $peRodada = $this->getPeRound($exposicao);
 
-                $maxVida = $this->getMaxHealth($classe, $exposicao, $vigor);
-                $maxSanidade = $this->getMaxSanity($classe, $exposicao);
-                $maxEsforco = $this->getMaxEffort($classe, $exposicao, $presenca);
-            }
+            $maxVida = $this->getMaxHealth($classe, $exposicao, $vigor);
+            $maxSanidade = $this->getMaxSanity($classe, $exposicao);
+            $maxEsforco = $this->getMaxEffort($classe, $exposicao, $presenca);
 
             $fields = [
                 $nome,

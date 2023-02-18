@@ -307,9 +307,13 @@
 				critico="<?= $value['critico'] ?>" especial="<?= $value['especial'] ?>">
 					<td data-label="Arma"><?= ucfirst($value['arma']) ?></td>
 					<td data-label="Tipo"><?= ucfirst($value['tipo']) ?></td>
-					<td data-label="Ataque"><?= ucfirst($value['ataque']) ?></td>
+					<td data-label="Ataque">
+						<button class="btn-dice" sum="false"><?= ucfirst($value['ataque']) ?></button>
+					</td>
 					<td data-label="Alcance"><?= ucfirst($value['alcance']) ?></td>
-					<td data-label="Dano"><?= strtoupper($value['dano']) ?></td>
+					<td data-label="Dano">
+						<button class="btn-dice" sum="true"><?= strtoupper($value['dano']) ?></button>
+					</td>
 					<td data-label="Crítico"><?= $value['critico'] ?></td>
 					<td data-label="Especial"><?= ucfirst($value['especial']) ?></td>
 					<td class="inventory-edit">

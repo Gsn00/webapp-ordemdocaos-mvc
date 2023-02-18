@@ -47,7 +47,6 @@ if ($_POST['action'] == 'ficha-update') {
     $idade = $_POST['idade'];
     $nacionalidade = $_POST['nacionalidade'];
     $deslocamento = $_POST['deslocamento'];
-    $jogador = $_SESSION['user'];
     $exposicao = $_POST['exposicao'];
     $origem = $_POST['origem'];
     $trilha = $_POST['trilha'];
