@@ -21,7 +21,7 @@ O projeto não foi finalizado, mas já estava bem encaminhado. Iriamos fazer um 
 # Prints de algumas páginas
 
 ## Login
-<img src="https://media.discordapp.net/attachments/729850180207378444/1360681408460357683/Screenshot_1.png?ex=67fc00d0&is=67faaf50&hm=f2cbf286196b3682de3e15a08fcb2c2700e56284f54e2a1226a8dfb590dfce6b&=&format=webp&quality=lossless&width=1768&height=847">
+<img src="https://media.discordapp.net/attachments/729850180207378444/1360681408460357683/Screenshot_1.png?ex=67fff550&is=67fea3d0&hm=5d13c3667f6445d45498c499148639790f943a38fe9f98e91db7e1923527df69&=&format=webp&quality=lossless&width=1768&height=847">
 
 ## Home
 <img src="https://media.discordapp.net/attachments/729850180207378444/1360681408820936846/Screenshot_2.png?ex=67fc00d0&is=67faaf50&hm=8cf96c30b4404ad19b59c1bfdb6e8edabb27c09f83bca58a15ab082731774a48&=&format=webp&quality=lossless&width=1768&height=847">
