@@ -21,18 +21,18 @@ O projeto não foi finalizado, mas já estava bem encaminhado. Iriamos fazer um 
 # Prints de algumas páginas
 
 ## Login
-<img src="https://media.discordapp.net/attachments/729850180207378444/1360681408460357683/Screenshot_1.png?ex=67fff550&is=67fea3d0&hm=5d13c3667f6445d45498c499148639790f943a38fe9f98e91db7e1923527df69&=&format=webp&quality=lossless&width=1768&height=847">
+![Screenshot_1](https://github.com/user-attachments/assets/73723e95-52ee-4ea8-8dc8-20d32b621484)
 
 ## Home
-<img src="https://media.discordapp.net/attachments/729850180207378444/1360681408820936846/Screenshot_2.png?ex=67fc00d0&is=67faaf50&hm=8cf96c30b4404ad19b59c1bfdb6e8edabb27c09f83bca58a15ab082731774a48&=&format=webp&quality=lossless&width=1768&height=847">
+![Screenshot_2](https://github.com/user-attachments/assets/87e15f5e-8048-474f-b183-d2084911385e)
 
 ## Mesa
-<img src="https://media.discordapp.net/attachments/729850180207378444/1360681409500545226/Screenshot_4.png?ex=67fc00d0&is=67faaf50&hm=21c6fc9be2bf3f4ad38cac8bcd76f3e4f4a4f90e77b2c32fea70d8114a6cc8e6&=&format=webp&quality=lossless&width=1768&height=843">
-<img src="https://media.discordapp.net/attachments/729850180207378444/1360681409198686458/Screenshot_3.png?ex=67fc00d0&is=67faaf50&hm=dc4f52aedc39d704ff155317c71cf96ecd1e1b4795bfa8a8e2e091c39af7407a&=&format=webp&quality=lossless&width=1768&height=842">
+![Screenshot_4](https://github.com/user-attachments/assets/604b2eaf-d145-427a-9d10-6df8953406aa)
+![Screenshot_3](https://github.com/user-attachments/assets/d270dc19-a481-4561-8b32-57148595c90b)
 
 ## Criação de ficha
-<img src="https://media.discordapp.net/attachments/729850180207378444/1360681409806598184/criacaodeficha.png?ex=67fc00d0&is=67faaf50&hm=62c068a42fb1a830c4ab4dd50ab2f46a7a4a69490503f681d258baed131cd660&=&format=webp&quality=lossless&width=1768&height=846">
+![criacaodeficha](https://github.com/user-attachments/assets/e2f03e99-98eb-4ff8-931b-a19ddac8c040)
 
 ## Ficha
-<img src="https://media.discordapp.net/attachments/729850180207378444/1360681410276622427/Screenshot_5.png?ex=67fc00d0&is=67faaf50&hm=28d9dac0c11a290135467cf6a943abea2d31e3ccf6d00392b9986086abac9d97&=&format=webp&quality=lossless&width=1768&height=844">
-<img src="https://media.discordapp.net/attachments/729850180207378444/1360681408133333213/Screenshot_6.png?ex=67fc00cf&is=67faaf4f&hm=fed1670deae4bb2b42ffe08baf3eb6f3a85267066f1c88d314e16a556f2cfe00&=&format=webp&quality=lossless&width=1768&height=845">
+![Screenshot_5](https://github.com/user-attachments/assets/a58f5f5b-8904-4c10-9f7e-6509ffe15e6f)
+![Screenshot_6](https://github.com/user-attachments/assets/2ffc0337-e4df-4585-8f5d-f604a5729e5f)
