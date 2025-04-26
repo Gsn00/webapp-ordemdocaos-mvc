@@ -14,7 +14,7 @@ O projeto não foi finalizado, mas já estava bem encaminhado. Iriamos fazer um 
 - HTML5/CSS3
 - WebScockets
 - MySQL
-- Less
+- Sass
 
 
 
