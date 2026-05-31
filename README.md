@@ -12,7 +12,7 @@ O projeto não foi finalizado, mas já estava bem encaminhado. Iriamos fazer um 
 - Javascript
 - JQuery
 - HTML5/CSS3
-- WebScockets
+- WebSockets
 - MySQL
 - Sass
 
